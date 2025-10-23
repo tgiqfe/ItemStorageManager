@@ -43,6 +43,7 @@ namespace ItemStorageManager.ItemStorage.ACL
             }
         }
 
+        /*
         public static AccessRuleSummary[] LoadFromFileSystem(AuthorizationRuleCollection rules)
         {
             var list = new List<AccessRuleSummary>();
@@ -62,7 +63,7 @@ namespace ItemStorageManager.ItemStorage.ACL
             }
             return list.ToArray();
         }
-
+        */
 
         public override string ToString()
         {
