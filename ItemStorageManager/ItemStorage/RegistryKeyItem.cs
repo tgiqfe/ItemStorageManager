@@ -15,7 +15,7 @@ namespace ItemStorageManager.ItemStorage
         public override string Path { get; set; }
         public override string Name { get; set; }
 
-        public AccessRules AccessRules { get; set; }
+        public AccessRule AccessRule { get; set; }
 
         public RegistryKeyItem(string path)
         {
@@ -25,7 +25,7 @@ namespace ItemStorageManager.ItemStorage
             {
                 if(regKey != null)
                 {
-                    this.AccessRules = new AccessRules(regKey.GetAccessControl());
+                    this.AccessRule = new AccessRule(regKey.GetAccessControl());
                 }
             }
         }

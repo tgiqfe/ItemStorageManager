@@ -18,5 +18,18 @@ namespace ItemStorageManager.Functions
             if (!patternString.EndsWith("*")) { patternString = patternString + "$"; }
             return new Regex(patternString, RegexOptions.IgnoreCase);
         }
+
+        public static string FormatFileSize(long size)
+        {
+            string[] sizes = { "B", "KB", "MB", "GB", "TB" };
+            double len = size;
+            int order = 0;
+            while (len >= 1024 && order < sizes.Length - 1)
+            {
+                order++;
+                len = len / 1024;
+            }
+            return String.Format("{0:0.##} {1}", len, sizes[order]);
+        }
     }
 }
