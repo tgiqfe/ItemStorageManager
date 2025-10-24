@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class RegistryKeyItem : BaseItem
+    internal class RegistryKeyItem : IItem
     {
-        public override ItemType Type { get { return ItemType.RegistryKey; } }
+        public  ItemType Type { get { return ItemType.RegistryKey; } }
 
-        public override string Path { get; set; }
-        public override string Name { get; set; }
+        public  string Path { get; set; }
+        public  string Name { get; set; }
 
         public AccessRule AccessRule { get; set; }
 
@@ -28,6 +28,43 @@ namespace ItemStorageManager.ItemStorage
                     this.AccessRule = new AccessRule(regKey.GetAccessControl());
                 }
             }
+        }
+
+        public bool Exists()
+        {
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path))
+            {
+                if (regKey != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool Copy(string dstPath, bool overwrite)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove()
+        {
+            return Delete();
+        }
+
+        public bool Move(string dstPath)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Rename(string newName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

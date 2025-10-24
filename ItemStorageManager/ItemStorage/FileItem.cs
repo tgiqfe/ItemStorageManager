@@ -1,14 +1,13 @@
 ﻿using ItemStorageManager.Functions;
 using ItemStorageManager.ItemStorage.ACL;
-using System.Security.Principal;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class FileItem : BaseItem
+    internal class FileItem : IItem
     {
-        public override ItemType Type { get { return ItemType.File; } }
-        public override string Path { get; set; }
-        public override string Name { get; set; }
+        public  ItemType Type { get { return ItemType.File; } }
+        public  string Path { get; set; }
+        public  string Name { get; set; }
         public string Size { get; set; }
         public string FormatedSize { get; set; }
         public DateTime CreationTime { get; set; }
@@ -32,6 +31,61 @@ namespace ItemStorageManager.ItemStorage
             this.Attributes = fi.Attributes.ToString();
             this.AccessRule = new AccessRule(fi.GetAccessControl());
             this.SecurityBlock = File.Exists($"{path}:Zone.Identifier");
+        }
+
+        public bool Exists()
+        {
+            return File.Exists(this.Path);
+        }
+
+        public bool Copy(string dstPath, bool overwrite)
+        {
+            try
+            {
+                File.Copy(this.Path, dstPath, overwrite);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public bool Delete()
+        {
+            try
+            {
+                File.Delete(this.Path);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public bool Remove()
+        {
+            return this.Delete();
+        }
+
+        public bool Move(string dstPath)
+        {
+            try
+            {
+                File.Move(this.Path, dstPath);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public bool Rename(string newName)
+        {
+            try
+            {
+                var dstPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(this.Path), newName);
+                File.Move(this.Path, dstPath);
+                return true;
+            }
+            catch { }
+            return false;
         }
     }
 }

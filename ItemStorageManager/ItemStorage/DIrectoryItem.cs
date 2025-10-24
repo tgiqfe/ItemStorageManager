@@ -4,15 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic.FileIO;
+using System.IO;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class DirectoryItem : BaseItem
+    internal class DirectoryItem : IItem
     {
-        public override ItemType Type { get { return ItemType.Directory; } }
+        public ItemType Type { get { return ItemType.Directory; } }
 
-        public override string Path { get; set; }
-        public override string Name { get; set; }
+        public string Path { get; set; }
+        public string Name { get; set; }
         public DateTime CreationTime { get; set; }
         public DateTime LastWriteTime { get; set; }
         public DateTime LastAccessTime { get; set; }
@@ -39,10 +41,8 @@ namespace ItemStorageManager.ItemStorage
                 var di = new DirectoryInfo(this.Path);
                 return di.GetDirectories().LongLength;
             }
-            catch
-            {
-                return -1;
-            }
+            catch { }
+            return -1;
         }
 
         public long GetChildFileCount()
@@ -52,10 +52,8 @@ namespace ItemStorageManager.ItemStorage
                 var di = new DirectoryInfo(this.Path);
                 return di.GetFiles().LongLength;
             }
-            catch
-            {
-                return -1;
-            }
+            catch { }
+            return -1;
         }
 
         public long GetTotalFileSize()
@@ -64,17 +62,73 @@ namespace ItemStorageManager.ItemStorage
             {
                 long totalSize = 0;
                 var di = new DirectoryInfo(this.Path);
-                var files = di.GetFiles("*", SearchOption.AllDirectories);
+                var files = di.GetFiles("*", System.IO.SearchOption.AllDirectories);
                 foreach (var file in files)
                 {
                     totalSize += file.Length;
                 }
                 return totalSize;
             }
-            catch
+            catch { }
+            return -1;
+        }
+
+        public bool Exists()
+        {
+            return Directory.Exists(this.Path);
+        }
+
+        public bool Copy(string dstPath, bool overwrite)
+        {
+            try
             {
-                return -1;
+                FileSystem.CopyDirectory(this.Path, dstPath, overwrite);
+                return true;
             }
+            catch { }
+            return false;
+        }
+
+        public bool Delete()
+        {
+            try
+            {
+                Directory.Delete(this.Path, true);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public bool Remove()
+        {
+            return Delete();
+        }
+
+        public bool Move(string dstPath)
+        {
+            try
+            {
+                Directory.Move(this.Path, dstPath);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public bool Rename(string newName)
+        {
+            try
+            {
+                var parentDir = System.IO.Path.GetDirectoryName(this.Path);
+                var newPath = System.IO.Path.Combine(parentDir, newName);
+                Directory.Move(this.Path, newPath);
+                this.Path = newPath;
+                this.Name = newName;
+                return true;
+            }
+            catch { }
+            return false;
         }
     }
 }
