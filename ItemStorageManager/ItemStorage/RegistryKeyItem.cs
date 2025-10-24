@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class RegistryKeyItem : IItem
+    internal class RegistryKeyItem : IBaseItem, ISecurityItem
     {
         public ItemType Type { get { return ItemType.RegistryKey; } }
 
@@ -26,6 +26,8 @@ namespace ItemStorageManager.ItemStorage
                 }
             }
         }
+
+        #region from IBaseItem
 
         public bool Exists()
         {
@@ -182,5 +184,40 @@ namespace ItemStorageManager.ItemStorage
             }
             return false;
         }
+
+        #endregion
+        #region from ISecurityItem
+
+        public bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems)
+        {
+            return false;
+        }
+
+        public bool Grant(string accessRuleText)
+        {
+            return false;
+        }
+
+        public bool Revoke(string account)
+        {
+            return false;
+        }
+
+        public bool Revoke()
+        {
+            return false;
+        }
+
+        public bool ChangeOwner(string newOwner)
+        {
+            return false;
+        }
+
+        public bool ChangeInherited(bool isInherited)
+        {
+            return false;
+        }
+
+        #endregion
     }
 }

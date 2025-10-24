@@ -1,15 +1,16 @@
 ﻿using ItemStorageManager.ItemStorage.ACL;
+using ItemStorageManager.ItemStorage.Attrib;
+using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic.FileIO;
-using System.IO;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class DirectoryItem : IItem
+    internal class DirectoryItem : IBaseItem, ISecurityItem, IAttributeItem
     {
         public ItemType Type { get { return ItemType.Directory; } }
 
@@ -73,6 +74,8 @@ namespace ItemStorageManager.ItemStorage
             return -1;
         }
 
+        #region from IBaseItem
+
         public bool Exists()
         {
             return Directory.Exists(this.Path);
@@ -130,5 +133,56 @@ namespace ItemStorageManager.ItemStorage
             catch { }
             return false;
         }
+
+        #endregion
+        #region from ISecurityItem
+
+        public bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems)
+        {
+            return false;
+        }
+
+        public bool Grant(string accessRuleText)
+        {
+            return false;
+        }
+
+        public bool Revoke(string account)
+        {
+            return false;
+        }
+
+        public bool Revoke()
+        {
+            return false;
+        }
+
+        public bool ChangeOwner(string newOwner)
+        {
+            return false;
+        }
+
+        public bool ChangeInherited(bool isInherited)
+        {
+            return false;
+        }
+
+        #endregion
+        #region from IAttributeItem
+
+        public bool SetAttributes(string attributes)
+        {
+            try
+            {
+                var di = new DirectoryInfo(this.Path);
+                di.Attributes = AttributeFunctions.GetProcessedAttributes(attributes, di.Attributes);
+                this.Attributes = di.Attributes.ToString();
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        #endregion
     }
 }

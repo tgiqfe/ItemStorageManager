@@ -1,6 +1,6 @@
 ﻿namespace ItemStorageManager.ItemStorage
 {
-    internal interface IItem
+    internal interface IBaseItem
     {
         ItemType Type { get; }
         string Path { get; set; }

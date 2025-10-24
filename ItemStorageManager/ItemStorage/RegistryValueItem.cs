@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class RegistryValueItem : IItem
+    internal class RegistryValueItem : IBaseItem
     {
         public ItemType Type { get { return ItemType.RegistryValue; } }
 
@@ -54,6 +54,8 @@ namespace ItemStorageManager.ItemStorage
                 }
             }
         }
+
+        #region from IBaseItem
 
         public bool Exists()
         {
@@ -164,5 +166,12 @@ namespace ItemStorageManager.ItemStorage
             }
             return false;
         }
+
+        #endregion
+        #region from ISecurityItem
+
+        //  Nothing
+
+        #endregion
     }
 }
