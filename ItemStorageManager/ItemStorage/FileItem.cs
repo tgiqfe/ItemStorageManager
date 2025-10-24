@@ -1,6 +1,8 @@
 ﻿using ItemStorageManager.Functions;
 using ItemStorageManager.ItemStorage.ACL;
 using ItemStorageManager.ItemStorage.Attrib;
+using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace ItemStorageManager.ItemStorage
 {
@@ -15,7 +17,7 @@ namespace ItemStorageManager.ItemStorage
         public DateTime LastWriteTime { get; set; }
         public DateTime LastAccessTime { get; set; }
         public string Attributes { get; set; }
-        public AccessRule AccessRule { get; set; }
+        public ItemAccessRule AccessRule { get; set; }
         public bool SecurityBlock { get; set; }
 
         public FileItem(string path)
@@ -30,7 +32,7 @@ namespace ItemStorageManager.ItemStorage
             this.LastWriteTime = fi.LastWriteTime;
             this.LastAccessTime = fi.LastAccessTime;
             this.Attributes = fi.Attributes.ToString();
-            this.AccessRule = new AccessRule(fi.GetAccessControl());
+            this.AccessRule = new ItemAccessRule(fi.GetAccessControl());
             this.SecurityBlock = File.Exists($"{path}:Zone.Identifier");
         }
 
@@ -94,15 +96,29 @@ namespace ItemStorageManager.ItemStorage
         #endregion
         #region from ISecurityItem
 
-        public bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems )
+        public bool Grant(string account, string rights, string accessType, string inheritance = null, string propagation = null)
         {
-            propageteToSubItems = "None";
-
+            try
+            {
+                var rule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForFile();
+                var acl = new FileInfo(this.Path).GetAccessControl();
+                acl.AddAccessRule(rule);
+                return true;
+            }
+            catch { }
             return false;
         }
 
         public bool Grant(string accessRuleText)
         {
+            try
+            {
+                var rule = new AccessRuleSummary(accessRuleText).ToAccessRuleForFile();
+                var acl = new FileInfo(this.Path).GetAccessControl();
+                acl.AddAccessRule(rule);
+                return true;
+            }
+            catch { }
             return false;
         }
 
@@ -134,7 +150,7 @@ namespace ItemStorageManager.ItemStorage
             try
             {
                 var fi = new FileInfo(this.Path);
-                fi.Attributes = AttributeFunctions.GetProcessedAttributes(attributes, fi.Attributes);
+                fi.Attributes = AttributeFunctions.ParseFileAttributes(attributes, fi.Attributes);
                 this.Attributes = fi.Attributes.ToString();
                 return true;
             }

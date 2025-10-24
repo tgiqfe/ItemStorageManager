@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-var item = new FileItem(@"D:\Test\Images\Image_0002.jpg");
+var item = new FileItem(@"D:\Test\Test01\Image001.png");
 string json = JsonSerializer.Serialize(item,
     new JsonSerializerOptions
     {

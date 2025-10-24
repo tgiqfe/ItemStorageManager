@@ -9,7 +9,7 @@ namespace ItemStorageManager.ItemStorage
 {
     internal interface ISecurityItem
     {
-        bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems);
+        bool Grant(string account, string rights, string accessType, string inheritance, string propagation);
         bool Grant(string accessRuleText);
         bool Revoke(string account);
         bool Revoke();

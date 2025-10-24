@@ -8,32 +8,45 @@ namespace ItemStorageManager.ItemStorage.Attrib
 {
     internal class AttributeFunctions
     {
-        private static Dictionary<string, FileAttributes> AttribPair = new Dictionary<string, FileAttributes>(StringComparer.OrdinalIgnoreCase)
-        {
-            { "Archive", FileAttributes.Archive },
-            { "Compressed", FileAttributes.Compressed },
-            { "Device", FileAttributes.Device },
-            { "Directory", FileAttributes.Directory },
-            { "Encrypted", FileAttributes.Encrypted },
-            { "Hidden", FileAttributes.Hidden },
-            { "H", FileAttributes.Hidden },
-            { "IntegrityStream", FileAttributes.IntegrityStream },
-            { "None", FileAttributes.Normal },
-            { "Normal", FileAttributes.Normal },
-            { "NoScrubData", FileAttributes.NoScrubData },
-            { "NotContentIndexed", FileAttributes.NotContentIndexed },
-            { "Offline", FileAttributes.Offline },
-            { "ReadOnly", FileAttributes.ReadOnly },
-            { "R", FileAttributes.ReadOnly },
-            { "ReparsePoint", FileAttributes.ReparsePoint },
-            { "SparseFile", FileAttributes.SparseFile },
-            { "System", FileAttributes.System },
-            { "S", FileAttributes.System },
-            { "Temporary", FileAttributes.Temporary }
-        };
+        private static Dictionary<string, FileAttributes> AttributeMap = null;
 
-        public static FileAttributes GetProcessedAttributes(string attributeText, FileAttributes currentAttribute)
+        private static void LoadAttributeMap()
         {
+            AttributeMap ??= new Dictionary<string, FileAttributes>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Archive", FileAttributes.Archive },
+                { "Compressed", FileAttributes.Compressed },
+                { "Device", FileAttributes.Device },
+                { "Directory", FileAttributes.Directory },
+                { "Encrypted", FileAttributes.Encrypted },
+                { "Hidden", FileAttributes.Hidden },
+                { "H", FileAttributes.Hidden },
+                { "IntegrityStream", FileAttributes.IntegrityStream },
+                { "None", FileAttributes.Normal },
+                { "Normal", FileAttributes.Normal },
+                { "NoScrubData", FileAttributes.NoScrubData },
+                { "NotContentIndexed", FileAttributes.NotContentIndexed },
+                { "Offline", FileAttributes.Offline },
+                { "ReadOnly", FileAttributes.ReadOnly },
+                { "R", FileAttributes.ReadOnly },
+                { "ReparsePoint", FileAttributes.ReparsePoint },
+                { "SparseFile", FileAttributes.SparseFile },
+                { "System", FileAttributes.System },
+                { "S", FileAttributes.System },
+                { "Temporary", FileAttributes.Temporary }
+            };
+        }
+
+        /// <summary>
+        /// Parse FileAttributes from string
+        /// </summary>
+        /// <param name="attributeText"></param>
+        /// <param name="currentAttribute"></param>
+        /// <returns></returns>
+        public static FileAttributes ParseFileAttributes(string attributeText, FileAttributes currentAttribute)
+        {
+            LoadAttributeMap();
+
             string[] attributes = attributeText.Split(',').Select(x => x.Trim()).ToArray();
 
             var needReset = true;
@@ -42,29 +55,29 @@ namespace ItemStorageManager.ItemStorage.Attrib
             {
                 if (attrib.StartsWith("-"))
                 {
-                    if (AttribPair.ContainsKey(attrib.TrimStart('-')))
+                    if (AttributeMap.ContainsKey(attrib.TrimStart('-')))
                     {
-                        ret = ret & (~AttribPair[attrib.TrimStart('-')]);
+                        ret = ret & (~AttributeMap[attrib.TrimStart('-')]);
                     }
                 }
                 else if (attrib.StartsWith("+"))
                 {
-                    if (AttribPair.ContainsKey(attrib.TrimStart('+')))
+                    if (AttributeMap.ContainsKey(attrib.TrimStart('+')))
                     {
-                        ret = ret | AttribPair[attrib.TrimStart('+')];
+                        ret = ret | AttributeMap[attrib.TrimStart('+')];
                     }
                 }
                 else
                 {
                     string text = attrib;
-                    if (AttribPair.ContainsKey(text))
+                    if (AttributeMap.ContainsKey(text))
                     {
                         if (needReset)
                         {
                             ret = FileAttributes.None;
                             needReset = false;
                         }
-                        ret = ret | AttribPair[text];
+                        ret = ret | AttributeMap[text];
                     }
                 }
             }

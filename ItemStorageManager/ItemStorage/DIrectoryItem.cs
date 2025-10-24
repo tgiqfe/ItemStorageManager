@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +22,7 @@ namespace ItemStorageManager.ItemStorage
         public DateTime LastWriteTime { get; set; }
         public DateTime LastAccessTime { get; set; }
         public string Attributes { get; set; }
-        public AccessRule AccessRule { get; set; }
+        public ItemAccessRule AccessRule { get; set; }
 
         public DirectoryItem(string path)
         {
@@ -32,7 +34,7 @@ namespace ItemStorageManager.ItemStorage
             this.LastWriteTime = di.LastWriteTime;
             this.LastAccessTime = di.LastAccessTime;
             this.Attributes = di.Attributes.ToString();
-            this.AccessRule = new AccessRule(di.GetAccessControl());
+            this.AccessRule = new ItemAccessRule(di.GetAccessControl());
         }
 
         public long GetChildDirectoryCount()
@@ -137,13 +139,29 @@ namespace ItemStorageManager.ItemStorage
         #endregion
         #region from ISecurityItem
 
-        public bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems)
+        public bool Grant(string account, string rights, string accessType, string inheritance, string propagation)
         {
+            try
+            {
+                var rule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForDirectory();
+                var acl = new DirectoryInfo(this.Path).GetAccessControl();
+                acl.AddAccessRule(rule);
+                return true;
+            }
+            catch { }
             return false;
         }
 
         public bool Grant(string accessRuleText)
         {
+            try
+            {
+                var rule = new AccessRuleSummary(accessRuleText).ToAccessRuleForDirectory();
+                var acl = new DirectoryInfo(this.Path).GetAccessControl();
+                acl.AddAccessRule(rule);
+                return true;
+            }
+            catch { }
             return false;
         }
 
@@ -175,7 +193,7 @@ namespace ItemStorageManager.ItemStorage
             try
             {
                 var di = new DirectoryInfo(this.Path);
-                di.Attributes = AttributeFunctions.GetProcessedAttributes(attributes, di.Attributes);
+                di.Attributes = AttributeFunctions.ParseFileAttributes(attributes, di.Attributes);
                 this.Attributes = di.Attributes.ToString();
                 return true;
             }

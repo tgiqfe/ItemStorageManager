@@ -12,7 +12,7 @@ namespace ItemStorageManager.ItemStorage
         public string Path { get; set; }
         public string Name { get; set; }
 
-        public AccessRule AccessRule { get; set; }
+        public ItemAccessRule AccessRule { get; set; }
 
         public RegistryKeyItem(string path)
         {
@@ -22,7 +22,7 @@ namespace ItemStorageManager.ItemStorage
             {
                 if (regKey != null)
                 {
-                    this.AccessRule = new AccessRule(regKey.GetAccessControl());
+                    this.AccessRule = new ItemAccessRule(regKey.GetAccessControl());
                 }
             }
         }
@@ -190,11 +190,39 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems)
         {
+            try
+            {
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                {
+                    if (regKey != null)
+                    {
+                        var rule = new AccessRuleSummary(account, rights, accessType, inheritance, propageteToSubItems).ToAccessRuleForRegistryKey();
+                        var acl = regKey.GetAccessControl();
+                        acl.AddAccessRule(rule);
+                        return true;
+                    }
+                }
+            }
+            catch { }
             return false;
         }
 
         public bool Grant(string accessRuleText)
         {
+            try
+            {
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                {
+                    if (regKey != null)
+                    {
+                        var rule = new AccessRuleSummary(accessRuleText).ToAccessRuleForRegistryKey();
+                        var acl = regKey.GetAccessControl();
+                        acl.AddAccessRule(rule);
+                        return true;
+                    }
+                }
+            }
+            catch { }
             return false;
         }
 

@@ -10,7 +10,7 @@ using System.Windows.Markup;
 
 namespace ItemStorageManager.ItemStorage.ACL
 {
-    internal class AccessRule
+    internal class ItemAccessRule
     {
         public string Owner { get; set; }
         public bool IsInherited { get; set; }
@@ -24,7 +24,7 @@ namespace ItemStorageManager.ItemStorage.ACL
             set { value.Select(x => new AccessRuleSummary(x)).ToArray(); }
         }
 
-        public AccessRule(NativeObjectSecurity security)
+        public ItemAccessRule(NativeObjectSecurity security)
         {
             this.Owner = security.GetOwner(typeof(NTAccount)).Value;
             this.IsInherited = security.AreAccessRulesProtected == false;
