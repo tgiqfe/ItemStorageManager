@@ -24,7 +24,9 @@ namespace ItemStorageManager.ItemStorage
                 if (regKey != null)
                 {
                     this.ValueKind = regKey.GetValueKind(valueName);
-                    this.Data = regKey.GetValue(valueName);
+                    this.Data = this.ValueKind == RegistryValueKind.ExpandString ?
+                        regKey.GetValue(valueName, null, RegistryValueOptions.DoNotExpandEnvironmentNames) :
+                        regKey.GetValue(valueName);
                     switch (this.ValueKind)
                     {
                         case RegistryValueKind.String:
