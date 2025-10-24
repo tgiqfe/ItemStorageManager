@@ -10,10 +10,10 @@ namespace ItemStorageManager.ItemStorage
 {
     internal class RegistryKeyItem : IItem
     {
-        public  ItemType Type { get { return ItemType.RegistryKey; } }
+        public ItemType Type { get { return ItemType.RegistryKey; } }
 
-        public  string Path { get; set; }
-        public  string Name { get; set; }
+        public string Path { get; set; }
+        public string Name { get; set; }
 
         public AccessRule AccessRule { get; set; }
 
@@ -23,7 +23,7 @@ namespace ItemStorageManager.ItemStorage
             this.Name = System.IO.Path.GetFileName(path);
             using (var regKey = RegistryFunctions.GetRegistryKey(path))
             {
-                if(regKey != null)
+                if (regKey != null)
                 {
                     this.AccessRule = new AccessRule(regKey.GetAccessControl());
                 }
@@ -34,10 +34,14 @@ namespace ItemStorageManager.ItemStorage
         {
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path))
             {
-                if (regKey != null)
+                try
                 {
-                    return true;
+                    if (regKey != null)
+                    {
+                        return true;
+                    }
                 }
+                catch { }
             }
             return false;
         }
@@ -49,7 +53,19 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Delete()
         {
-            throw new NotImplementedException();
+            using (var regKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), true))
+            {
+                try
+                {
+                    if (regKey != null)
+                    {
+                        regKey.DeleteSubKeyTree(this.Name);
+                        return true;
+                    }
+                }
+                catch { }
+            }
+            return false;
         }
 
         public bool Remove()
