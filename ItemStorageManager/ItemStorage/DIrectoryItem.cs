@@ -76,7 +76,7 @@ namespace ItemStorageManager.ItemStorage
             return -1;
         }
 
-        public static bool Create(string newPath)
+        public static bool New(string newPath)
         {
             try
             {

@@ -29,7 +29,7 @@ namespace ItemStorageManager.ItemStorage
             }
         }
 
-        public static bool Create(string newPath)
+        public static bool New(string newPath)
         {
             try
             {
@@ -208,9 +208,9 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems)
         {
-            try
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
+                try
                 {
                     if (regKey != null)
                     {
@@ -221,16 +221,16 @@ namespace ItemStorageManager.ItemStorage
                         return true;
                     }
                 }
+                catch { }
             }
-            catch { }
             return false;
         }
 
         public bool Grant(string accessRuleText)
         {
-            try
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
+                try
                 {
                     if (regKey != null)
                     {
@@ -241,16 +241,16 @@ namespace ItemStorageManager.ItemStorage
                         return true;
                     }
                 }
+                catch { }
             }
-            catch { }
             return false;
         }
 
         public bool Revoke(string account)
         {
-            try
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
+                try
                 {
                     if (regKey != null)
                     {
@@ -268,16 +268,16 @@ namespace ItemStorageManager.ItemStorage
                         return true;
                     }
                 }
+                catch { }
             }
-            catch { }
             return false;
         }
 
         public bool RevokeAll()
         {
-            try
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
+                try
                 {
                     if (regKey != null)
                     {
@@ -292,16 +292,16 @@ namespace ItemStorageManager.ItemStorage
                         return true;
                     }
                 }
+                catch { }
             }
-            catch { }
             return false;
         }
 
         public bool ChangeOwner(string newOwner)
         {
-            try
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
+                try
                 {
                     if (regKey != null)
                     {
@@ -311,16 +311,16 @@ namespace ItemStorageManager.ItemStorage
                         return true;
                     }
                 }
+                catch { }
             }
-            catch { }
             return false;
         }
 
         public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
-            try
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
+                try
                 {
                     if (regKey != null)
                     {
@@ -330,8 +330,8 @@ namespace ItemStorageManager.ItemStorage
                         return true;
                     }
                 }
+                catch { }
             }
-            catch { }
             return false;
         }
 

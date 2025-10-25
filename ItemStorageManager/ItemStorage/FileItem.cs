@@ -36,7 +36,7 @@ namespace ItemStorageManager.ItemStorage
             this.SecurityBlock = File.Exists($"{path}:Zone.Identifier");
         }
 
-        public static bool Create(string newPath)
+        public static bool New(string newPath)
         {
             try
             {
@@ -47,9 +47,24 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        public static bool Create(string newParentPath, string newPath)
+        public static bool New(string newParentPath, string newPath)
         {
-            return Create(System.IO.Path.Combine(newParentPath, newPath));
+            return New(System.IO.Path.Combine(newParentPath, newPath));
+        }
+
+        public bool RemoveSecurityBlock()
+        {
+            try
+            {
+                var adsPath = $"{this.Path}:Zone.Identifier";
+                if (File.Exists(adsPath))
+                {
+                    File.Delete(adsPath);
+                }
+                return true;
+            }
+            catch { }
+            return false;
         }
 
         #region from IBaseItem

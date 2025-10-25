@@ -27,6 +27,8 @@ namespace ItemStorageManager.ItemStorage
                     this.Data = this.ValueKind == RegistryValueKind.ExpandString ?
                         regKey.GetValue(valueName, null, RegistryValueOptions.DoNotExpandEnvironmentNames) :
                         regKey.GetValue(valueName);
+                    this.DataAsString = RegistryFunctions.RegistryValueToString(this.Data, this.ValueKind);
+                    /*
                     switch (this.ValueKind)
                     {
                         case RegistryValueKind.String:
@@ -50,18 +52,20 @@ namespace ItemStorageManager.ItemStorage
                         default:
                             this.DataAsString = "Unsupported Value Kind";
                             break;
-                    }
+                    }*/
                 }
             }
         }
 
-        public static bool Create(string keyPath, string name, object data, string valueKind)
+        #region Registry Value Set Methods
+
+        public static bool Set(string keyPath, string name, object data, string valueKindString)
         {
             using (var regKey = RegistryFunctions.GetRegistryKey(keyPath, true, true))
             {
                 try
                 {
-                    regKey.SetValue(name, data, RegistryFunctions.StringToValueKind(valueKind));
+                    regKey.SetValue(name, data, RegistryFunctions.StringToValueKind(valueKindString));
                     return true;
                 }
                 catch { }
@@ -69,6 +73,52 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        public static bool Set(string keyPath, string name, object data, RegistryValueKind valueKind)
+        {
+            using (var regKey = RegistryFunctions.GetRegistryKey(keyPath, true, true))
+            {
+                try
+                {
+                    regKey.SetValue(name, data, valueKind);
+                    return true;
+                }
+                catch { }
+            }
+            return false;
+        }
+
+        public static bool Set(string keyPath, string name, string dataString, RegistryValueKind valueKind)
+        {
+            using (var regKey = RegistryFunctions.GetRegistryKey(keyPath, true, true))
+            {
+                try
+                {
+                    object data = RegistryFunctions.StringToRegistryValue(dataString, valueKind);
+                    regKey.SetValue(name, data, valueKind);
+                    return true;
+                }
+                catch { }
+            }
+            return false;
+        }
+
+        public static bool Set(string keyPath, string name, string dataString, string valueKindString)
+        {
+            using (var regKey = RegistryFunctions.GetRegistryKey(keyPath, true, true))
+            {
+                try
+                {
+                    RegistryValueKind valueKind = RegistryFunctions.StringToValueKind(valueKindString);
+                    object data = RegistryFunctions.StringToRegistryValue(dataString, valueKind);
+                    regKey.SetValue(name, data, valueKind);
+                    return true;
+                }
+                catch { }
+            }
+            return false;
+        }
+
+        #endregion
         #region from IBaseItem
 
         public bool Exists()
