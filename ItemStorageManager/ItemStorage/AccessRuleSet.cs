@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text.Json.Serialization;
-using System.Windows.Markup;
 
-namespace ItemStorageManager.ItemStorage.ACL
+namespace ItemStorageManager.ItemStorage
 {
-    internal class ItemAccessRule
+    internal class AccessRuleSet
     {
         public string Owner { get; set; }
         public bool IsInherited { get; set; }
@@ -24,10 +18,10 @@ namespace ItemStorageManager.ItemStorage.ACL
             set { value.Select(x => new AccessRuleSummary(x)).ToArray(); }
         }
 
-        public ItemAccessRule(NativeObjectSecurity security)
+        public AccessRuleSet(NativeObjectSecurity security)
         {
-            this.Owner = security.GetOwner(typeof(NTAccount)).Value;
-            this.IsInherited = security.AreAccessRulesProtected == false;
+            Owner = security.GetOwner(typeof(NTAccount)).Value;
+            IsInherited = security.AreAccessRulesProtected == false;
 
             var list = new List<AccessRuleSummary>();
             foreach (var rule in security.GetAccessRules(true, false, typeof(NTAccount)))
@@ -41,7 +35,7 @@ namespace ItemStorageManager.ItemStorage.ACL
                     list.Add(new AccessRuleSummary(regRule));
                 }
             }
-            this.AccessRuleSummaries = list.ToArray();
+            AccessRuleSummaries = list.ToArray();
         }
     }
 }

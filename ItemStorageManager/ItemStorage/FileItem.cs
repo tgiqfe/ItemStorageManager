@@ -1,12 +1,10 @@
 ﻿using ItemStorageManager.Functions;
-using ItemStorageManager.ItemStorage.ACL;
-using ItemStorageManager.ItemStorage.Attrib;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class FileItem : IBaseItem, ISecurityItem, IAttributeItem
+    internal class FileItem : IBaseItem
     {
         public ItemType Type { get { return ItemType.File; } }
         public string Path { get; set; }
@@ -17,7 +15,7 @@ namespace ItemStorageManager.ItemStorage
         public DateTime LastWriteTime { get; set; }
         public DateTime LastAccessTime { get; set; }
         public string Attributes { get; set; }
-        public ItemAccessRule AccessRule { get; set; }
+        public AccessRuleSet AccessRule { get; set; }
         public bool SecurityBlock { get; set; }
 
         public FileItem(string path)
@@ -32,7 +30,7 @@ namespace ItemStorageManager.ItemStorage
             this.LastWriteTime = fi.LastWriteTime;
             this.LastAccessTime = fi.LastAccessTime;
             this.Attributes = fi.Attributes.ToString();
-            this.AccessRule = new ItemAccessRule(fi.GetAccessControl());
+            this.AccessRule = new AccessRuleSet(fi.GetAccessControl());
             this.SecurityBlock = File.Exists($"{path}:Zone.Identifier");
         }
 

@@ -1,5 +1,4 @@
 ﻿using ItemStorageManager.Functions;
-using ItemStorageManager.ItemStorage.ACL;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Security.AccessControl;
@@ -7,14 +6,14 @@ using System.Security.Principal;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class RegistryKeyItem : IBaseItem, ISecurityItem
+    internal class RegistryKeyItem : IBaseItem
     {
         public ItemType Type { get { return ItemType.RegistryKey; } }
 
         public string Path { get; set; }
         public string Name { get; set; }
 
-        public ItemAccessRule AccessRule { get; set; }
+        public AccessRuleSet AccessRule { get; set; }
 
         public RegistryKeyItem(string path)
         {
@@ -24,7 +23,7 @@ namespace ItemStorageManager.ItemStorage
             {
                 if (regKey != null)
                 {
-                    this.AccessRule = new ItemAccessRule(regKey.GetAccessControl());
+                    this.AccessRule = new AccessRuleSet(regKey.GetAccessControl());
                 }
             }
         }

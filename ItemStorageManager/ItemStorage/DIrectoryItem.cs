@@ -1,6 +1,4 @@
-﻿using ItemStorageManager.ItemStorage.ACL;
-using ItemStorageManager.ItemStorage.Attrib;
-using Microsoft.VisualBasic.FileIO;
+﻿using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class DirectoryItem : IBaseItem, ISecurityItem, IAttributeItem
+    internal class DirectoryItem : IBaseItem
     {
         public ItemType Type { get { return ItemType.Directory; } }
 
@@ -22,7 +20,7 @@ namespace ItemStorageManager.ItemStorage
         public DateTime LastWriteTime { get; set; }
         public DateTime LastAccessTime { get; set; }
         public string Attributes { get; set; }
-        public ItemAccessRule AccessRule { get; set; }
+        public AccessRuleSet AccessRule { get; set; }
 
         public DirectoryItem(string path)
         {
@@ -34,7 +32,7 @@ namespace ItemStorageManager.ItemStorage
             this.LastWriteTime = di.LastWriteTime;
             this.LastAccessTime = di.LastAccessTime;
             this.Attributes = di.Attributes.ToString();
-            this.AccessRule = new ItemAccessRule(di.GetAccessControl());
+            this.AccessRule = new AccessRuleSet(di.GetAccessControl());
         }
 
         public long GetChildDirectoryCount()

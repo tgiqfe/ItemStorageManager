@@ -1,6 +1,5 @@
 ﻿using ItemStorageManager.Functions;
 using Microsoft.Win32;
-using System.Linq.Expressions;
 
 namespace ItemStorageManager.ItemStorage
 {
@@ -28,31 +27,6 @@ namespace ItemStorageManager.ItemStorage
                         regKey.GetValue(valueName, null, RegistryValueOptions.DoNotExpandEnvironmentNames) :
                         regKey.GetValue(valueName);
                     this.DataAsString = RegistryFunctions.RegistryValueToString(this.Data, this.ValueKind);
-                    /*
-                    switch (this.ValueKind)
-                    {
-                        case RegistryValueKind.String:
-                            this.DataAsString = this.Data as string;
-                            break;
-                        case RegistryValueKind.ExpandString:
-                            this.DataAsString = regKey.GetValue(valueName, Data, RegistryValueOptions.DoNotExpandEnvironmentNames) as string;
-                            break;
-                        case RegistryValueKind.DWord:
-                            this.DataAsString = ((int)this.Data).ToString();
-                            break;
-                        case RegistryValueKind.QWord:
-                            this.DataAsString = ((long)this.Data).ToString();
-                            break;
-                        case RegistryValueKind.MultiString:
-                            this.DataAsString = "[ " + string.Join(", ", (string[])this.Data) + " ]";
-                            break;
-                        case RegistryValueKind.Binary:
-                            this.DataAsString = BitConverter.ToString((byte[])this.Data).Replace("-", " ");
-                            break;
-                        default:
-                            this.DataAsString = "Unsupported Value Kind";
-                            break;
-                    }*/
                 }
             }
         }

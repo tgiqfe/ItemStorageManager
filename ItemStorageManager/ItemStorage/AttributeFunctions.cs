@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ItemStorageManager.ItemStorage.Attrib
+namespace ItemStorageManager.ItemStorage
 {
     internal class AttributeFunctions
     {
@@ -57,7 +57,7 @@ namespace ItemStorageManager.ItemStorage.Attrib
                 {
                     if (AttributeMap.ContainsKey(attrib.TrimStart('-')))
                     {
-                        ret = ret & (~AttributeMap[attrib.TrimStart('-')]);
+                        ret = ret & ~AttributeMap[attrib.TrimStart('-')];
                     }
                 }
                 else if (attrib.StartsWith("+"))
