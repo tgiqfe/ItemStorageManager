@@ -2,6 +2,7 @@
 using ItemStorageManager.ItemStorage.ACL;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Security.AccessControl;
 
 namespace ItemStorageManager.ItemStorage
 {
@@ -196,9 +197,10 @@ namespace ItemStorageManager.ItemStorage
                 {
                     if (regKey != null)
                     {
-                        var rule = new AccessRuleSummary(account, rights, accessType, inheritance, propageteToSubItems).ToAccessRuleForRegistryKey();
+                        var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propageteToSubItems).ToAccessRuleForRegistryKey();
                         var acl = regKey.GetAccessControl();
-                        acl.AddAccessRule(rule);
+                        acl.AddAccessRule(newRule);
+                        regKey.SetAccessControl(acl);
                         return true;
                     }
                 }
@@ -215,9 +217,10 @@ namespace ItemStorageManager.ItemStorage
                 {
                     if (regKey != null)
                     {
-                        var rule = new AccessRuleSummary(accessRuleText).ToAccessRuleForRegistryKey();
+                        var newRule = new AccessRuleSummary(accessRuleText).ToAccessRuleForRegistryKey();
                         var acl = regKey.GetAccessControl();
-                        acl.AddAccessRule(rule);
+                        acl.AddAccessRule(newRule);
+                        regKey.SetAccessControl(acl);
                         return true;
                     }
                 }
@@ -228,11 +231,52 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Revoke(string account)
         {
+            try
+            {
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                {
+                    if (regKey != null)
+                    {
+                        var acl = regKey.GetAccessControl();
+                        bool isChange = false;
+                        foreach (RegistryAccessRule rule in acl.GetAccessRules(true, false, typeof(System.Security.Principal.NTAccount)))
+                        {
+                            if (string.Equals(rule.IdentityReference.Value, account, StringComparison.OrdinalIgnoreCase))
+                            {
+                                acl.RemoveAccessRule(rule);
+                                isChange = true;
+                            }
+                        }
+                        if (isChange) regKey.SetAccessControl(acl);
+                        return true;
+                    }
+                }
+            }
+            catch { }
             return false;
         }
 
-        public bool Revoke()
+        public bool RevokeAll()
         {
+            try
+            {
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                {
+                    if (regKey != null)
+                    {
+                        var acl = regKey.GetAccessControl();
+                        bool isChange = false;
+                        foreach (RegistryAccessRule rule in acl.GetAccessRules(true, false, typeof(System.Security.Principal.NTAccount)))
+                        {
+                            acl.RemoveAccessRule(rule);
+                            isChange = true;
+                        }
+                        if (isChange) regKey.SetAccessControl(acl);
+                        return true;
+                    }
+                }
+            }
+            catch { }
             return false;
         }
 

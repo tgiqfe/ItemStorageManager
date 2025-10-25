@@ -12,7 +12,7 @@ namespace ItemStorageManager.ItemStorage
         bool Grant(string account, string rights, string accessType, string inheritance, string propagation);
         bool Grant(string accessRuleText);
         bool Revoke(string account);
-        bool Revoke();
+        bool RevokeAll();
         bool ChangeOwner(string newOwner);
         bool ChangeInherited(bool isInherited);
     }

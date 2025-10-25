@@ -100,9 +100,11 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                var rule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForFile();
-                var acl = new FileInfo(this.Path).GetAccessControl();
-                acl.AddAccessRule(rule);
+                var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForFile();
+                var fi = new FileInfo(this.Path);
+                var acl = fi.GetAccessControl();
+                acl.AddAccessRule(newRule);
+                fi.SetAccessControl(acl);
                 return true;
             }
             catch { }
@@ -113,9 +115,11 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                var rule = new AccessRuleSummary(accessRuleText).ToAccessRuleForFile();
-                var acl = new FileInfo(this.Path).GetAccessControl();
-                acl.AddAccessRule(rule);
+                var newRule = new AccessRuleSummary(accessRuleText).ToAccessRuleForFile();
+                var fi = new FileInfo(this.Path);
+                var acl = fi.GetAccessControl();
+                acl.AddAccessRule(newRule);
+                fi.SetAccessControl(acl);
                 return true;
             }
             catch { }
@@ -124,11 +128,42 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Revoke(string account)
         {
+            try
+            {
+                var fi = new FileInfo(this.Path);
+                var acl = fi.GetAccessControl();
+                bool isChange = false;
+                foreach (FileSystemAccessRule rule in acl.GetAccessRules(true, true, typeof(NTAccount)))
+                {
+                    if (rule.IdentityReference.Value.Equals(account, StringComparison.OrdinalIgnoreCase))
+                    {
+                        acl.RemoveAccessRule(rule);
+                        isChange = true;
+                    }
+                }
+                if (isChange) fi.SetAccessControl(acl);
+                return true;
+            }
+            catch { }
             return false;
         }
 
-        public bool Revoke()
+        public bool RevokeAll()
         {
+            try
+            {
+                var fi = new FileInfo(this.Path);
+                var acl = fi.GetAccessControl();
+                bool isChange = false;
+                foreach (FileSystemAccessRule rule in acl.GetAccessRules(true, true, typeof(NTAccount)))
+                {
+                    acl.RemoveAccessRule(rule);
+                    isChange = true;
+                }
+                if (isChange) fi.SetAccessControl(acl);
+                return true;
+            }
+            catch { }
             return false;
         }
 
