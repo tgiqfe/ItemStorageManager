@@ -14,6 +14,6 @@ namespace ItemStorageManager.ItemStorage
         bool Revoke(string account);
         bool RevokeAll();
         bool ChangeOwner(string newOwner);
-        bool ChangeInherited(bool isInherited);
+        bool ChangeInherited(bool isInherited, bool preserve);
     }
 }

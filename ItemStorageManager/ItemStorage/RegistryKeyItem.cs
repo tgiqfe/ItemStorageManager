@@ -3,6 +3,7 @@ using ItemStorageManager.ItemStorage.ACL;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Security.AccessControl;
+using System.Security.Principal;
 
 namespace ItemStorageManager.ItemStorage
 {
@@ -282,11 +283,39 @@ namespace ItemStorageManager.ItemStorage
 
         public bool ChangeOwner(string newOwner)
         {
+            try
+            {
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                {
+                    if (regKey != null)
+                    {
+                        var acl = regKey.GetAccessControl();
+                        acl.SetOwner(new NTAccount(newOwner));
+                        regKey.SetAccessControl(acl);
+                        return true;
+                    }
+                }
+            }
+            catch { }
             return false;
         }
 
-        public bool ChangeInherited(bool isInherited)
+        public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
+            try
+            {
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                {
+                    if (regKey != null)
+                    {
+                        var acl = regKey.GetAccessControl();
+                        acl.SetAccessRuleProtection(!isInherited, preserve);
+                        regKey.SetAccessControl(acl);
+                        return true;
+                    }
+                }
+            }
+            catch { }
             return false;
         }
 

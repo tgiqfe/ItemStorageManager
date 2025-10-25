@@ -212,11 +212,29 @@ namespace ItemStorageManager.ItemStorage
 
         public bool ChangeOwner(string newOwner)
         {
+            try
+            {
+                var di = new DirectoryInfo(this.Path);
+                var acl = di.GetAccessControl();
+                acl.SetOwner(new NTAccount(newOwner));
+                di.SetAccessControl(acl);
+                return true;
+            }
+            catch { }
             return false;
         }
 
-        public bool ChangeInherited(bool isInherited)
+        public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
+            try
+            {
+                var di = new DirectoryInfo(this.Path);
+                var acl = di.GetAccessControl();
+                acl.SetAccessRuleProtection(!isInherited, preserve);
+                di.SetAccessControl(acl);
+                return true;
+            }
+            catch { }
             return false;
         }
 
