@@ -36,6 +36,22 @@ namespace ItemStorageManager.ItemStorage
             this.SecurityBlock = File.Exists($"{path}:Zone.Identifier");
         }
 
+        public static bool Create(string newPath)
+        {
+            try
+            {
+                File.CreateText(newPath).Close();
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public static bool Create(string newParentPath, string newPath)
+        {
+            return Create(System.IO.Path.Combine(newParentPath, newPath));
+        }
+
         #region from IBaseItem
 
         public bool Exists()

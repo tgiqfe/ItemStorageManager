@@ -55,6 +55,20 @@ namespace ItemStorageManager.ItemStorage
             }
         }
 
+        public static bool Create(string keyPath, string name, object data, string valueKind)
+        {
+            using (var regKey = RegistryFunctions.GetRegistryKey(keyPath, true, true))
+            {
+                try
+                {
+                    regKey.SetValue(name, data, RegistryFunctions.StringToValueKind(valueKind));
+                    return true;
+                }
+                catch { }
+            }
+            return false;
+        }
+
         #region from IBaseItem
 
         public bool Exists()
@@ -112,7 +126,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Delete()
         {
-            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
                 {
@@ -134,7 +148,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Move(string dstPath)
         {
-            using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
+            using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
                 try
@@ -142,6 +156,7 @@ namespace ItemStorageManager.ItemStorage
                     var valueData = srcKey.GetValue(this.Name);
                     var valueKind = srcKey.GetValueKind(this.Name);
                     dstKey.SetValue(this.Name, valueData, valueKind);
+                    srcKey.DeleteValue(this.Name);
                     return true;
                 }
                 catch { }
@@ -151,7 +166,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Rename(string newName)
         {
-            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
                 {

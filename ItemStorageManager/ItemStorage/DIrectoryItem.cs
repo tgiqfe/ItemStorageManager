@@ -76,6 +76,17 @@ namespace ItemStorageManager.ItemStorage
             return -1;
         }
 
+        public static bool Create(string newPath)
+        {
+            try
+            {
+                Directory.CreateDirectory(newPath);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
         #region from IBaseItem
 
         public bool Exists()

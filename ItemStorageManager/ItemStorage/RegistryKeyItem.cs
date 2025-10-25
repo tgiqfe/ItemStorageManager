@@ -29,6 +29,22 @@ namespace ItemStorageManager.ItemStorage
             }
         }
 
+        public static bool Create(string newPath)
+        {
+            try
+            {
+                using (var regKey = RegistryFunctions.GetRegistryKey(newPath, true, true))
+                {
+                    if (regKey != null)
+                    {
+                        return true;
+                    }
+                }
+            }
+            catch { }
+            return false;
+        }
+
         #region from IBaseItem
 
         public bool Exists()
@@ -49,8 +65,8 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Copy(string dstPath, bool overwrite)
         {
-            using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path, false))
-            using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true))
+            using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
+            using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
                 try
                 {
@@ -76,7 +92,7 @@ namespace ItemStorageManager.ItemStorage
             }
             foreach (var subKeyName in srcKey.GetSubKeyNames())
             {
-                using (var srcSubKey = srcKey.OpenSubKey(subKeyName, false))
+                using (var srcSubKey = srcKey.OpenSubKey(subKeyName))
                 using (var dstSubKey = dstKey.CreateSubKey(subKeyName, true))
                 {
                     try
@@ -114,7 +130,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Delete()
         {
-            using (var regKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), true))
+            using (var regKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
             {
                 try
                 {
@@ -136,8 +152,8 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Move(string dstPath)
         {
-            using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path, false))
-            using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true))
+            using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
+            using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
                 try
                 {
@@ -145,7 +161,7 @@ namespace ItemStorageManager.ItemStorage
                 }
                 catch { }
             }
-            using (var parentKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), true))
+            using (var parentKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
             {
                 try
                 {
@@ -163,8 +179,8 @@ namespace ItemStorageManager.ItemStorage
         public bool Rename(string newName)
         {
             string dstPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(this.Path), newName);
-            using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path, false))
-            using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true))
+            using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
+            using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
                 try
                 {
@@ -172,7 +188,7 @@ namespace ItemStorageManager.ItemStorage
                 }
                 catch { }
             }
-            using (var parentKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), true))
+            using (var parentKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
             {
                 try
                 {
@@ -194,7 +210,7 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
                 {
                     if (regKey != null)
                     {
@@ -214,7 +230,7 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
                 {
                     if (regKey != null)
                     {
@@ -234,7 +250,7 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
                 {
                     if (regKey != null)
                     {
@@ -261,7 +277,7 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
                 {
                     if (regKey != null)
                     {
@@ -285,7 +301,7 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
                 {
                     if (regKey != null)
                     {
@@ -304,7 +320,7 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, true))
+                using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
                 {
                     if (regKey != null)
                     {
