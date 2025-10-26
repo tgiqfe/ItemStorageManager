@@ -111,7 +111,7 @@ namespace ItemStorageManager.Functions
         /// Unload specified key from HKEY_USERS.
         /// </summary>
         /// <param name="keyName"></param>
-        public static void UnLoad(string keyName)
+        public static void Unload(string keyName)
         {
             if (AdjustToken())
             {

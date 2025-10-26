@@ -59,7 +59,7 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                ItemStorageManager.Functions.RegistryHive.UnLoad(keyName);
+                ItemStorageManager.Functions.RegistryHive.Unload(keyName);
             }
             catch { }
             return false;
