@@ -1,6 +1,7 @@
 ﻿using ItemStorageManager.Functions;
 using Microsoft.Win32;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
@@ -30,15 +31,35 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool New(string newPath)
         {
-            try
+            using (var regKey = RegistryFunctions.GetRegistryKey(newPath, true, true))
             {
-                using (var regKey = RegistryFunctions.GetRegistryKey(newPath, true, true))
+                try
                 {
                     if (regKey != null)
                     {
                         return true;
                     }
                 }
+                catch { }
+            }
+            return false;
+        }
+
+        public static bool Load(string keyName, string hiveFile)
+        {
+            try
+            {
+                ItemStorageManager.Functions.RegistryHive.Load(keyName, hiveFile);
+            }
+            catch { }
+            return false;
+        }
+
+        public static bool Unload(string keyName)
+        {
+            try
+            {
+                ItemStorageManager.Functions.RegistryHive.UnLoad(keyName);
             }
             catch { }
             return false;
