@@ -215,13 +215,19 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
+                Logger.WriteLine("Info", $"Changing owner of file '{this.Path}' to '{newOwner}'.");
                 var fi = new FileInfo(this.Path);
                 var acl = fi.GetAccessControl();
                 acl.SetOwner(new NTAccount(newOwner));
                 fi.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully changed owner of file '{this.Path}' to '{newOwner}'.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to change owner of file '{this.Path}' to '{newOwner}'. Exception: {e.Message}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
