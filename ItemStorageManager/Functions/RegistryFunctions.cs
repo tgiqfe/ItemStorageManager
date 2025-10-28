@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ItemStorageManager.Functions
 {
-    public class RegistryFunctions
+    internal class RegistryFunctions
     {
         /// <summary>
         /// Get RegistryKey instance from full key path.

@@ -80,8 +80,6 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        #region from IBaseItem
-
         public bool Exists()
         {
             return File.Exists(this.Path);
@@ -136,9 +134,6 @@ namespace ItemStorageManager.ItemStorage
             catch { }
             return false;
         }
-
-        #endregion
-        #region from ISecurityItem
 
         public bool Grant(string account, string rights, string accessType, string inheritance = null, string propagation = null)
         {
@@ -211,6 +206,11 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Change owner of the file.
+        /// </summary>
+        /// <param name="newOwner"></param>
+        /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
             try
@@ -245,22 +245,28 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        #endregion
-        #region from IAttributeItem
-
+        /// <summary>
+        /// Set file attributes.
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
         public bool SetAttributes(string attributes)
         {
             try
             {
+                Logger.WriteLine("Info", $"Setting attributes of file '{this.Path}' to '{attributes}'.");)
                 var fi = new FileInfo(this.Path);
                 fi.Attributes = AttributeFunctions.ParseFileAttributes(attributes, fi.Attributes);
                 this.Attributes = fi.Attributes.ToString();
+                Logger.WriteLine("Info", $"Successfully set attributes of file '{this.Path}' to '{attributes}'.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to set attributes of file '{this.Path}' to '{attributes}'. Exception: {e.Message}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
-
-        #endregion
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ItemStorageManager.Functions
 {
-    public class RegistryHive
+    internal class RegistryHive
     {
         #region Local parameters
 

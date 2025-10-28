@@ -84,8 +84,6 @@ namespace ItemStorageManager.ItemStorage
             return New(newPath);
         }
 
-        #region from IBaseItem
-
         public bool Exists()
         {
             return Directory.Exists(this.Path);
@@ -143,9 +141,6 @@ namespace ItemStorageManager.ItemStorage
             catch { }
             return false;
         }
-
-        #endregion
-        #region from ISecurityItem
 
         public bool Grant(string account, string rights, string accessType, string inheritance, string propagation)
         {
@@ -218,6 +213,11 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Change owner of the directory.
+        /// </summary>
+        /// <param name="newOwner"></param>
+        /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
             try
@@ -252,22 +252,28 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        #endregion
-        #region from IAttributeItem
-
+        /// <summary>
+        /// Set attributes of the directory.
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <returns></returns>
         public bool SetAttributes(string attributes)
         {
             try
             {
+                Logger.WriteLine("Info", $"Setting attributes of directory '{this.Path}' to '{attributes}'.");
                 var di = new DirectoryInfo(this.Path);
                 di.Attributes = AttributeFunctions.ParseFileAttributes(attributes, di.Attributes);
                 this.Attributes = di.Attributes.ToString();
+                Logger.WriteLine("Info", $"Successfully set attributes of directory '{this.Path}' to '{attributes}'.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to set attributes of directory '{this.Path}' to '{attributes}'. Exception: {e.Message}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
-
-        #endregion
     }
 }

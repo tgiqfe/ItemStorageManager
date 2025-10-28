@@ -70,8 +70,6 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        #region from IBaseItem
-
         public bool Exists()
         {
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path))
@@ -228,9 +226,6 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        #endregion
-        #region from ISecurityItem
-
         public bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems)
         {
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
@@ -322,6 +317,11 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Change owner of the registry key.
+        /// </summary>
+        /// <param name="newOwner"></param>
+        /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
@@ -365,7 +365,5 @@ namespace ItemStorageManager.ItemStorage
             }
             return false;
         }
-
-        #endregion
     }
 }

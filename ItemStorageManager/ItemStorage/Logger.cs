@@ -4,7 +4,8 @@ namespace ItemStorageManager.ItemStorage
 {
     internal class Logger
     {
-        private const string LOGFILENAME = "ItemStorage";
+        const string LOGFILENAME = "ItemStorage";
+        const string LOGTITLE = "ItemStorage";
 
         private static object _logLock = new object();
         private static string _logFilePath = null;
@@ -28,7 +29,7 @@ namespace ItemStorageManager.ItemStorage
         /// <param name="level">Info,Warn,Error,Debug,None</param>
         /// <param name="title"></param>
         /// <param name="message"></param>
-        public static void WriteLine(string level, string title, string message)
+        public static void WriteLine(string level, string message)
         {
             if (_logFilePath == null) Initialize();
             string dd = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
@@ -36,19 +37,9 @@ namespace ItemStorageManager.ItemStorage
             {
                 using (var sw = new StreamWriter(_logFilePath, true, Encoding.UTF8))
                 {
-                    sw.WriteLine($"[{dd}][{level}]{title}: {message}");
+                    sw.WriteLine($"[{dd}][{level}]{LOGTITLE}: {message}");
                 }
             }
-        }
-
-        /// <summary>
-        /// Write log line to log file with Info level.
-        /// </summary>
-        /// <param name="title"></param>
-        /// <param name="message"></param>
-        public static void WriteLine(string title, string message)
-        {
-            WriteLine("Info", title, message);
         }
 
         /// <summary>
@@ -57,7 +48,7 @@ namespace ItemStorageManager.ItemStorage
         /// <param name="message"></param>
         public static void WriteLine(string message)
         {
-            WriteLine("Info", "GeneralLog", message);
+            WriteLine("Info", message);
         }
 
         /// <summary>

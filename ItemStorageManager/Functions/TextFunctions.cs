@@ -2,7 +2,7 @@
 
 namespace ItemStorageManager.Functions
 {
-    public class TextFunctions
+    internal class TextFunctions
     {
         public static Regex WildcardMatch(string text)
         {

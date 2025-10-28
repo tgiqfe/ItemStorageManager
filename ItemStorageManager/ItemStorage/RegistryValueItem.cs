@@ -31,8 +31,6 @@ namespace ItemStorageManager.ItemStorage
             }
         }
 
-        #region Registry Value Set Methods
-
         public static bool Set(string keyPath, string name, object data, string valueKindString)
         {
             using (var regKey = RegistryFunctions.GetRegistryKey(keyPath, true, true))
@@ -91,9 +89,6 @@ namespace ItemStorageManager.ItemStorage
             }
             return false;
         }
-
-        #endregion
-        #region from IBaseItem
 
         public bool Exists()
         {
@@ -205,12 +200,5 @@ namespace ItemStorageManager.ItemStorage
             }
             return false;
         }
-
-        #endregion
-        #region from ISecurityItem
-
-        //  Nothing
-
-        #endregion
     }
 }
