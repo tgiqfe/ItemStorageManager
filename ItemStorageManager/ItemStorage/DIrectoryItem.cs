@@ -6,8 +6,9 @@ namespace ItemStorageManager.ItemStorage
 {
     internal class DirectoryItem : IBaseItem
     {
-        public ItemType Type { get { return ItemType.Directory; } }
+        #region Public parameter
 
+        public ItemType Type { get { return ItemType.Directory; } }
         public string Path { get; set; }
         public string Name { get; set; }
         public DateTime CreationTime { get; set; }
@@ -15,6 +16,8 @@ namespace ItemStorageManager.ItemStorage
         public DateTime LastAccessTime { get; set; }
         public string Attributes { get; set; }
         public AccessRuleSet AccessRule { get; set; }
+
+        #endregion
 
         const string _log_TargetItem = "directory";
 
@@ -310,6 +313,12 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Change access rule inheritance of the directory.
+        /// </summary>
+        /// <param name="isInherited"></param>
+        /// <param name="preserve"></param>
+        /// <returns></returns>
         public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
             Logger.WriteLine("Info", $"Changing inheritance of {_log_TargetItem}. '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
@@ -341,7 +350,7 @@ namespace ItemStorageManager.ItemStorage
             try
             {
                 var di = new DirectoryInfo(this.Path);
-                di.Attributes = AttributeFunctions.ParseFileAttributes(attributes, di.Attributes);
+                di.Attributes = AttributeMapping.ParseFileAttributes(attributes, di.Attributes);
                 this.Attributes = di.Attributes.ToString();
                 Logger.WriteLine("Info", $"Successfully set attributes of directory '{this.Path}' to '{attributes}'.");
                 return true;

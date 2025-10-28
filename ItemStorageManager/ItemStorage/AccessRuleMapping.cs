@@ -2,19 +2,19 @@
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class AccessRuleFunctions
+    internal class AccessRuleMapping
     {
         #region Enum parameter parsing maps.
 
-        private static Dictionary<string, FileSystemRights> RightsMap = null;
-        private static Dictionary<string, RegistryRights> RegistryRightsMap = null;
-        private static Dictionary<string, InheritanceFlags> InheritanceMap = null;
-        private static Dictionary<string, PropagationFlags> PropagationMap = null;
-        private static Dictionary<string, AccessControlType> AccessTypeMap = null;
+        private static Dictionary<string, FileSystemRights> _fileRightsMap = null;
+        private static Dictionary<string, RegistryRights> _registryRightsMap = null;
+        private static Dictionary<string, InheritanceFlags> _inheritanceMap = null;
+        private static Dictionary<string, PropagationFlags> _propagationMap = null;
+        private static Dictionary<string, AccessControlType> _accessTypeMap = null;
 
-        private static void LoadRightsMap()
+        private static void InitializeRightsMap()
         {
-            RightsMap ??= new Dictionary<string, FileSystemRights>(StringComparer.OrdinalIgnoreCase)
+            _fileRightsMap = new Dictionary<string, FileSystemRights>(StringComparer.OrdinalIgnoreCase)
             {
                 { "AppendData", FileSystemRights.AppendData },
                 { "ChangePermissions", FileSystemRights.ChangePermissions },
@@ -42,9 +42,9 @@ namespace ItemStorageManager.ItemStorage
             };
         }
 
-        private static void LoadRegistryRightsMap()
+        private static void InitializeRegistryRightsMap()
         {
-            RegistryRightsMap ??= new Dictionary<string, RegistryRights>(StringComparer.OrdinalIgnoreCase)
+            _registryRightsMap = new Dictionary<string, RegistryRights>(StringComparer.OrdinalIgnoreCase)
             {
                 { "QueryValues", RegistryRights.QueryValues },
                 { "SetValue", RegistryRights.SetValue },
@@ -63,9 +63,9 @@ namespace ItemStorageManager.ItemStorage
             };
         }
 
-        private static void LoadInheritanceMap()
+        private static void InitializeInheritanceMap()
         {
-            InheritanceMap ??= new Dictionary<string, InheritanceFlags>(StringComparer.OrdinalIgnoreCase)
+            _inheritanceMap = new Dictionary<string, InheritanceFlags>(StringComparer.OrdinalIgnoreCase)
             {
                 { "ContainerInherit", InheritanceFlags.ContainerInherit },
                 { "None", InheritanceFlags.None },
@@ -73,9 +73,9 @@ namespace ItemStorageManager.ItemStorage
             };
         }
 
-        private static void LoadPropagationMap()
+        private static void InitializePropagationMap()
         {
-            PropagationMap ??= new Dictionary<string, PropagationFlags>(StringComparer.OrdinalIgnoreCase)
+            _propagationMap = new Dictionary<string, PropagationFlags>(StringComparer.OrdinalIgnoreCase)
             {
                 { "None", PropagationFlags.None },
                 { "NoPropagateInherit", PropagationFlags.NoPropagateInherit },
@@ -83,9 +83,9 @@ namespace ItemStorageManager.ItemStorage
             };
         }
 
-        private static void LoadRightsTypeMap()
+        private static void InitializeRightsTypeMap()
         {
-            AccessTypeMap ??= new Dictionary<string, AccessControlType>(StringComparer.OrdinalIgnoreCase)
+            _accessTypeMap = new Dictionary<string, AccessControlType>(StringComparer.OrdinalIgnoreCase)
             {
                 { "Allow", AccessControlType.Allow },
                 { "Deny", AccessControlType.Deny }
@@ -101,29 +101,34 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public static FileSystemRights ParseFileSystemRights(string rightsText)
         {
-            LoadRightsMap();
+            if (_fileRightsMap == null) InitializeRightsMap();
             FileSystemRights rights = 0;
             string[] rightsParts = rightsText.Split(',').Select(x => x.Trim()).ToArray();
             foreach (var part in rightsParts)
             {
-                if (RightsMap.ContainsKey(part))
+                if (_fileRightsMap.ContainsKey(part))
                 {
-                    rights |= RightsMap[part];
+                    rights |= _fileRightsMap[part];
                 }
             }
             return rights;
         }
 
+        /// <summary>
+        /// Prase RegistryRights from string
+        /// </summary>
+        /// <param name="rightsText"></param>
+        /// <returns></returns>
         public static RegistryRights ParseRegistryRights(string rightsText)
         {
-            LoadRegistryRightsMap();
+            if (_registryRightsMap == null) InitializeRegistryRightsMap();
             RegistryRights rights = 0;
             string[] rightsParts = rightsText.Split(',').Select(x => x.Trim()).ToArray();
             foreach (var part in rightsParts)
             {
-                if (RegistryRightsMap.ContainsKey(part))
+                if (_registryRightsMap.ContainsKey(part))
                 {
-                    rights |= RegistryRightsMap[part];
+                    rights |= _registryRightsMap[part];
                 }
             }
             return rights;
@@ -136,9 +141,9 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public static InheritanceFlags ParseInheritanceFlags(string inheritanceText)
         {
-            LoadInheritanceMap();
-            return InheritanceMap.ContainsKey(inheritanceText) ?
-                InheritanceMap[inheritanceText] :
+            if (_inheritanceMap == null) InitializeInheritanceMap();
+            return _inheritanceMap.ContainsKey(inheritanceText) ?
+                _inheritanceMap[inheritanceText] :
                 InheritanceFlags.None;
         }
 
@@ -149,9 +154,9 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public static PropagationFlags ParsePropagationFlags(string propagationText)
         {
-            LoadPropagationMap();
-            return PropagationMap.ContainsKey(propagationText) ?
-                PropagationMap[propagationText] :
+            if (_propagationMap == null) InitializePropagationMap();
+            return _propagationMap.ContainsKey(propagationText) ?
+                _propagationMap[propagationText] :
                 PropagationFlags.None;
         }
 
@@ -162,9 +167,9 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public static AccessControlType ParseAccessControlType(string accessTypeText)
         {
-            LoadRightsTypeMap();
-            return AccessTypeMap.ContainsKey(accessTypeText) ?
-                AccessTypeMap[accessTypeText] :
+            if (_accessTypeMap == null) InitializeRightsTypeMap();
+            return _accessTypeMap.ContainsKey(accessTypeText) ?
+                _accessTypeMap[accessTypeText] :
                 AccessControlType.Allow;
         }
     }

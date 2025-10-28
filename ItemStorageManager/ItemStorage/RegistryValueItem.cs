@@ -5,14 +5,16 @@ namespace ItemStorageManager.ItemStorage
 {
     internal class RegistryValueItem : IBaseItem
     {
-        public ItemType Type { get { return ItemType.RegistryValue; } }
+        #region Public parameter
 
+        public ItemType Type { get { return ItemType.RegistryValue; } }
         public string Path { get; set; }
         public string Name { get; set; }
-
         public RegistryValueKind ValueKind { get; set; }
         public object Data { get; set; }
         public string DataAsString { get; set; }
+
+        #endregion
 
         const string _log_TargetItem = "registry value";
 

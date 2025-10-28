@@ -4,12 +4,22 @@ namespace ItemStorageManager.ItemStorage
 {
     internal class Logger
     {
+        /// <summary>
+        /// Log file name without extension.
+        /// </summary>
         const string LOGFILENAME = "ItemStorage";
+
+        /// <summary>
+        /// Log title. (Displayed in each log line, same as the log file name)
+        /// </summary>
         const string LOGTITLE = "ItemStorage";
 
         private static object _logLock = new object();
         private static string _logFilePath = null;
 
+        /// <summary>
+        /// Initialize log file path. Create Logs folder if not exists.
+        /// </summary>
         private static void Initialize()
         {
             if (_logFilePath == null)

@@ -9,15 +9,16 @@ namespace ItemStorageManager.ItemStorage
 {
     internal class RegistryKeyItem : IBaseItem
     {
-        public ItemType Type { get { return ItemType.RegistryKey; } }
+        #region Public parameter 
 
+        public ItemType Type { get { return ItemType.RegistryKey; } }
         public string Path { get; set; }
         public string Name { get; set; }
-
         public AccessRuleSet AccessRule { get; set; }
 
-        const string _log_TargetItem = "registry key";
+        #endregion
 
+        const string _log_TargetItem = "registry key";
 
         public RegistryKeyItem(string path)
         {
@@ -419,6 +420,12 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Change access rule inheritance of the registry key.
+        /// </summary>
+        /// <param name="isInherited"></param>
+        /// <param name="preserve"></param>
+        /// <returns></returns>
         public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
             Logger.WriteLine("Info", $"Changing inheritance of {_log_TargetItem}. '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");

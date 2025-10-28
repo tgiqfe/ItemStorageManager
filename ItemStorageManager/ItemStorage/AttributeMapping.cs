@@ -1,12 +1,12 @@
 ﻿namespace ItemStorageManager.ItemStorage
 {
-    internal class AttributeFunctions
+    internal class AttributeMapping
     {
-        private static Dictionary<string, FileAttributes> AttributeMap = null;
+        private static Dictionary<string, FileAttributes> _attributeMap = null;
 
-        private static void LoadAttributeMap()
+        private static void InitializeAttributeMap()
         {
-            AttributeMap ??= new Dictionary<string, FileAttributes>(StringComparer.OrdinalIgnoreCase)
+            _attributeMap ??= new Dictionary<string, FileAttributes>(StringComparer.OrdinalIgnoreCase)
             {
                 { "Archive", FileAttributes.Archive },
                 { "Compressed", FileAttributes.Compressed },
@@ -39,39 +39,38 @@
         /// <returns></returns>
         public static FileAttributes ParseFileAttributes(string attributeText, FileAttributes currentAttribute)
         {
-            LoadAttributeMap();
+            if (_attributeMap == null) InitializeAttributeMap();
 
             string[] attributes = attributeText.Split(',').Select(x => x.Trim()).ToArray();
-
             var needReset = true;
             var ret = currentAttribute;
             foreach (var attrib in attributes)
             {
                 if (attrib.StartsWith("-"))
                 {
-                    if (AttributeMap.ContainsKey(attrib.TrimStart('-')))
+                    if (_attributeMap.ContainsKey(attrib.TrimStart('-')))
                     {
-                        ret = ret & ~AttributeMap[attrib.TrimStart('-')];
+                        ret = ret & ~_attributeMap[attrib.TrimStart('-')];
                     }
                 }
                 else if (attrib.StartsWith("+"))
                 {
-                    if (AttributeMap.ContainsKey(attrib.TrimStart('+')))
+                    if (_attributeMap.ContainsKey(attrib.TrimStart('+')))
                     {
-                        ret = ret | AttributeMap[attrib.TrimStart('+')];
+                        ret = ret | _attributeMap[attrib.TrimStart('+')];
                     }
                 }
                 else
                 {
                     string text = attrib;
-                    if (AttributeMap.ContainsKey(text))
+                    if (_attributeMap.ContainsKey(text))
                     {
                         if (needReset)
                         {
                             ret = FileAttributes.None;
                             needReset = false;
                         }
-                        ret = ret | AttributeMap[text];
+                        ret = ret | _attributeMap[text];
                     }
                 }
             }
