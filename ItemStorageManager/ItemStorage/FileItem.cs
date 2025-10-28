@@ -18,6 +18,8 @@ namespace ItemStorageManager.ItemStorage
         public AccessRuleSet AccessRule { get; set; }
         public bool SecurityBlock { get; set; }
 
+        const string _log_TargetItem = "file";
+
         public FileItem(string path)
         {
             var fi = new FileInfo(path);
@@ -36,21 +38,21 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool New(string newPath)
         {
-            Logger.WriteLine("Info", $"Creating new file at path '{newPath}'.");
+            Logger.WriteLine("Info", $"Creating new {_log_TargetItem}. '{newPath}'");
             try
-            {   
+            {
                 var parent = System.IO.Path.GetDirectoryName(newPath);
                 if (!Directory.Exists(parent))
                 {
                     Directory.CreateDirectory(parent);
                 }
                 File.CreateText(newPath).Close();
-                Logger.WriteLine("Info", $"Successfully created new file.");
+                Logger.WriteLine("Info", $"Successfully created new {_log_TargetItem}.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to create new file. Exception: {e.ToString()}");
+                Logger.WriteLine("Error", $"Failed to create new {_log_TargetItem}. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;
@@ -73,6 +75,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool RemoveSecurityBlock()
         {
+            Logger.WriteLine("Info", $"Removing security block from {_log_TargetItem}. '{this.Path}'");
             try
             {
                 var adsPath = $"{this.Path}:Zone.Identifier";
@@ -80,36 +83,54 @@ namespace ItemStorageManager.ItemStorage
                 {
                     File.Delete(adsPath);
                 }
+                Logger.WriteLine("Info", $"Successfully removed security block from {_log_TargetItem}.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to remove security block from {_log_TargetItem}. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
         public bool Exists()
         {
+            Logger.WriteLine("Info", $"Checking existence of {_log_TargetItem} at path '{this.Path}'.");
             return File.Exists(this.Path);
         }
 
         public bool Copy(string dstPath, bool overwrite)
         {
+            Logger.WriteLine("Info", $"Copying {_log_TargetItem}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
             try
             {
                 File.Copy(this.Path, dstPath, overwrite);
+                Logger.WriteLine("Info", $"Successfully copied {_log_TargetItem}.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to copy {_log_TargetItem}. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
         public bool Delete()
         {
+            Logger.WriteLine("Info", $"Deleting {_log_TargetItem}. '{this.Path}'");
             try
             {
                 File.Delete(this.Path);
+                Logger.WriteLine("Info", $"Successfully deleted {_log_TargetItem}.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to delete {_log_TargetItem}. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
@@ -120,30 +141,42 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Move(string dstPath)
         {
+            Logger.WriteLine("Info", $"Moving {_log_TargetItem}. From '{this.Path}' to '{dstPath}'.");
             try
             {
                 File.Move(this.Path, dstPath);
+                Logger.WriteLine("Info", $"Successfully moved {_log_TargetItem}.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to move {_log_TargetItem}. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
         public bool Rename(string newName)
         {
+            Logger.WriteLine("Info", $"Renaming {_log_TargetItem}. From '{this.Name}' to '{newName}'.");
             try
             {
                 var dstPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(this.Path), newName);
                 File.Move(this.Path, dstPath);
+                Logger.WriteLine("Info", $"Successfully renamed {_log_TargetItem}.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to rename {_log_TargetItem}. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
         public bool Grant(string account, string rights, string accessType, string inheritance = null, string propagation = null)
         {
-            Logger.WriteLine("Info", $"Granting access rule to file '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'.");
+            Logger.WriteLine("Info", $"Granting access rule to {_log_TargetItem}. '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'");
             try
             {
                 var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForFile();
@@ -151,12 +184,12 @@ namespace ItemStorageManager.ItemStorage
                 var acl = fi.GetAccessControl();
                 acl.AddAccessRule(newRule);
                 fi.SetAccessControl(acl);
-                Logger.WriteLine("Info", $"Successfully granted access rule to file.");
+                Logger.WriteLine("Info", $"Successfully granted access rule to {_log_TargetItem}.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to grant access rule to file. Exception: {e.ToString()}");
+                Logger.WriteLine("Error", $"Failed to grant access rule to {_log_TargetItem}. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;
@@ -164,7 +197,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Grant(string accessRuleText)
         {
-            Logger.WriteLine("Info", $"Granting access rule '{accessRuleText}' to file '{this.Path}'.");
+            Logger.WriteLine("Info", $"Granting access rule to {_log_TargetItem}. '{this.Path}': AccessRule='{accessRuleText}'");
             try
             {
                 var newRule = new AccessRuleSummary(accessRuleText).ToAccessRuleForFile();
@@ -172,12 +205,12 @@ namespace ItemStorageManager.ItemStorage
                 var acl = fi.GetAccessControl();
                 acl.AddAccessRule(newRule);
                 fi.SetAccessControl(acl);
-                Logger.WriteLine("Info", $"Successfully granted access rule.");
+                Logger.WriteLine("Info", $"Successfully granted access rule to {_log_TargetItem}.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to grant access rule to file. Exception: {e.ToString()}");
+                Logger.WriteLine("Error", $"Failed to grant access rule to {_log_TargetItem}. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;
@@ -185,6 +218,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Revoke(string account)
         {
+            Logger.WriteLine("Info", $"Revoking access rules from {_log_TargetItem}. '{this.Path}': Account='{account}'");
             try
             {
                 var fi = new FileInfo(this.Path);
@@ -199,14 +233,20 @@ namespace ItemStorageManager.ItemStorage
                     }
                 }
                 if (isChange) fi.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully revoked access rules from {_log_TargetItem}.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to revoke access rules from {_log_TargetItem}. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
         public bool RevokeAll()
         {
+            Logger.WriteLine("Info", $"Revoking all access rules from {_log_TargetItem}. '{this.Path}'");
             try
             {
                 var fi = new FileInfo(this.Path);
@@ -218,9 +258,14 @@ namespace ItemStorageManager.ItemStorage
                     isChange = true;
                 }
                 if (isChange) fi.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully revoked all access rules from {_log_TargetItem}.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to revoke all access rules from {_log_TargetItem}. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
@@ -231,19 +276,19 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
-            Logger.WriteLine("Info", $"Changing owner of file '{this.Path}' to '{newOwner}'.");
+            Logger.WriteLine("Info", $"Changing owner of {_log_TargetItem}. '{this.Path}' to '{newOwner}'");
             try
             {
                 var fi = new FileInfo(this.Path);
                 var acl = fi.GetAccessControl();
                 acl.SetOwner(new NTAccount(newOwner));
                 fi.SetAccessControl(acl);
-                Logger.WriteLine("Info", $"Successfully changed owner of file.");
+                Logger.WriteLine("Info", $"Successfully changed owner of {_log_TargetItem}.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to change owner of file. Exception: {e.ToString()}");
+                Logger.WriteLine("Error", $"Failed to change owner of {_log_TargetItem}. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;
@@ -251,19 +296,19 @@ namespace ItemStorageManager.ItemStorage
 
         public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
-            Logger.WriteLine("Info", $"Changing inheritance of file '{this.Path}' to '{isInherited}', PreserveExistingRules='{preserve}'.");
+            Logger.WriteLine("Info", $"Changing inheritance of {_log_TargetItem}. '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
             try
             {
                 var fi = new FileInfo(this.Path);
                 var acl = fi.GetAccessControl();
                 acl.SetAccessRuleProtection(!isInherited, preserve);
                 fi.SetAccessControl(acl);
-                Logger.WriteLine("Info", $"Successfully changed inheritance of file.");
+                Logger.WriteLine("Info", $"Successfully changed inheritance of {_log_TargetItem}.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to change inheritance of file. Exception: {e.ToString()}");
+                Logger.WriteLine("Error", $"Failed to change inheritance of {_log_TargetItem}. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;

@@ -16,6 +16,9 @@ namespace ItemStorageManager.ItemStorage
 
         public AccessRuleSet AccessRule { get; set; }
 
+        const string _log_TargetItem = "registry key";
+
+
         public RegistryKeyItem(string path)
         {
             this.Path = path;
@@ -31,20 +34,20 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool New(string newPath)
         {
-            Logger.WriteLine("Info", $"Creating new registry key at '{newPath}'.");
+            Logger.WriteLine("Info", $"Creating new {_log_TargetItem}. '{newPath}'");
             using (var regKey = RegistryFunctions.GetRegistryKey(newPath, true, true))
             {
                 try
                 {
                     if (regKey != null)
                     {
-                        Logger.WriteLine("Info", $"Successfully created new registry key.");
+                        Logger.WriteLine("Info", $"Successfully created new {_log_TargetItem}.");
                         return true;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to create new registry key. Exception: {e.ToString()}");
+                    Logger.WriteLine("Error", $"Failed to create new {_log_TargetItem}. Exception: {e.ToString()}");
                     Logger.WriteRaw(e.Message);
                 }
             }
@@ -78,6 +81,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Exists()
         {
+            Logger.WriteLine("Info", $"Checking existence of {_log_TargetItem} at path '{this.Path}'.");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path))
             {
                 try
@@ -87,22 +91,32 @@ namespace ItemStorageManager.ItemStorage
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to check existence of {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
 
         public bool Copy(string dstPath, bool overwrite)
         {
+            Logger.WriteLine("Info", $"Copying {_log_TargetItem}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
             using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
             using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
                 try
                 {
                     CopyRegistryKey(srcKey, dstKey);
+                    Logger.WriteLine("Info", $"Successfully copied {_log_TargetItem}.");
                     return true;
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to copy {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
@@ -159,6 +173,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Delete()
         {
+            Logger.WriteLine("Info", $"Deleting {_log_TargetItem}. '{this.Path}'");
             using (var regKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
             {
                 try
@@ -166,10 +181,15 @@ namespace ItemStorageManager.ItemStorage
                     if (regKey != null)
                     {
                         regKey.DeleteSubKeyTree(this.Name);
+                        Logger.WriteLine("Info", $"Successfully deleted {_log_TargetItem}.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to delete {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
@@ -181,14 +201,20 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Move(string dstPath)
         {
+            Logger.WriteLine("Info", $"Moving {_log_TargetItem}. From '{this.Path}' to '{dstPath}'.");
             using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
             using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
                 try
                 {
                     CopyRegistryKey(srcKey, dstKey);
+                    Logger.WriteLine("Info", $"Successfully moved (copy before move) {_log_TargetItem}.");
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to move (copy before move) {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             using (var parentKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
             {
@@ -197,16 +223,22 @@ namespace ItemStorageManager.ItemStorage
                     if (parentKey != null)
                     {
                         parentKey.DeleteSubKeyTree(this.Name);
+                        Logger.WriteLine("Info", $"Successfully moved {_log_TargetItem}.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to move {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
 
         public bool Rename(string newName)
         {
+            Logger.WriteLine("Info", $"Renaming {_log_TargetItem}. Key {this.Path}. From '{this.Name}' to '{newName}'.");
             string dstPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(this.Path), newName);
             using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
             using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
@@ -214,8 +246,13 @@ namespace ItemStorageManager.ItemStorage
                 try
                 {
                     CopyRegistryKey(srcKey, dstKey);
+                    Logger.WriteLine("Info", $"Successfully renamed (copy before rename) {_log_TargetItem}.");
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to rename (copy before rename) {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             using (var parentKey = RegistryFunctions.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
             {
@@ -224,17 +261,22 @@ namespace ItemStorageManager.ItemStorage
                     if (parentKey != null)
                     {
                         parentKey.DeleteSubKeyTree(this.Name);
+                        Logger.WriteLine("Info", $"Successfully renamed {_log_TargetItem}.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to rename {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
 
         public bool Grant(string account, string rights, string accessType, string inheritance, string propagation)
         {
-            Logger.WriteLine("Info", $"Granting access rule to registry key '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'.");
+            Logger.WriteLine("Info", $"Granting access rule to {_log_TargetItem}. '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -245,13 +287,13 @@ namespace ItemStorageManager.ItemStorage
                         var acl = regKey.GetAccessControl();
                         acl.AddAccessRule(newRule);
                         regKey.SetAccessControl(acl);
-                        Logger.WriteLine("Info", $"Successfully granted access rule to registry key.");
+                        Logger.WriteLine("Info", $"Successfully granted access rule to {_log_TargetItem}.");
                         return true;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to grant access rule to registry key. Exception: {e.ToString()}");
+                    Logger.WriteLine("Error", $"Failed to grant access rule to {_log_TargetItem}. Exception: {e.ToString()}");
                     Logger.WriteRaw(e.Message);
                 }
             }
@@ -260,7 +302,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Grant(string accessRuleText)
         {
-            Logger.WriteLine("Info", $"Granting access rule to registry key '{this.Path}': {accessRuleText}.");
+            Logger.WriteLine("Info", $"Granting access rule to {_log_TargetItem}. '{this.Path}': AccessRule='{accessRuleText}'");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -271,13 +313,13 @@ namespace ItemStorageManager.ItemStorage
                         var acl = regKey.GetAccessControl();
                         acl.AddAccessRule(newRule);
                         regKey.SetAccessControl(acl);
-                        Logger.WriteLine("Info", $"Successfully granted access rule to registry key.");
+                        Logger.WriteLine("Info", $"Successfully granted access rule to {_log_TargetItem}.");
                         return true;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to grant access rule to registry key. Exception: {e.ToString()}");
+                    Logger.WriteLine("Error", $"Failed to grant access rule to {_log_TargetItem}. Exception: {e.ToString()}");
                     Logger.WriteRaw(e.Message);
                 }
             }
@@ -286,6 +328,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Revoke(string account)
         {
+            Logger.WriteLine("Info", $"Revoking access rules from {_log_TargetItem}. '{this.Path}': Account='{account}'");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -303,10 +346,15 @@ namespace ItemStorageManager.ItemStorage
                             }
                         }
                         if (isChange) regKey.SetAccessControl(acl);
+                        Logger.WriteLine("Info", $"Successfully revoked access rules from {_log_TargetItem}.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to revoke access rules from {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
@@ -315,6 +363,7 @@ namespace ItemStorageManager.ItemStorage
         {
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
+                Logger.WriteLine("Info", $"Revoking all access rules from {_log_TargetItem}. '{this.Path}'");
                 try
                 {
                     if (regKey != null)
@@ -327,10 +376,15 @@ namespace ItemStorageManager.ItemStorage
                             isChange = true;
                         }
                         if (isChange) regKey.SetAccessControl(acl);
+                        Logger.WriteLine("Info", $"Successfully revoked all access rules from {_log_TargetItem}.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to revoke all access rules from {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
@@ -342,7 +396,7 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
-            Logger.WriteLine("Info", $"Changing owner of registry key '{this.Path}' to '{newOwner}'.");
+            Logger.WriteLine("Info", $"Changing owner of {_log_TargetItem}. '{this.Path}' to '{newOwner}'");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -352,13 +406,13 @@ namespace ItemStorageManager.ItemStorage
                         var acl = regKey.GetAccessControl();
                         acl.SetOwner(new NTAccount(newOwner));
                         regKey.SetAccessControl(acl);
-                        Logger.WriteLine("Info", $"Successfully changed owner of registry key '{this.Path}' to '{newOwner}'.");
+                        Logger.WriteLine("Info", $"Successfully changed owner of {_log_TargetItem}.");
                         return true;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to change owner of registry key '{this.Path}' to '{newOwner}'. Exception: {e.Message}");
+                    Logger.WriteLine("Error", $"Failed to change owner of {_log_TargetItem}. Exception: {e.ToString()}");
                     Logger.WriteRaw(e.Message);
                 }
             }
@@ -367,7 +421,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
-            Logger.WriteLine("Info", $"Changing inheritance of registry key '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
+            Logger.WriteLine("Info", $"Changing inheritance of {_log_TargetItem}. '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -377,13 +431,13 @@ namespace ItemStorageManager.ItemStorage
                         var acl = regKey.GetAccessControl();
                         acl.SetAccessRuleProtection(!isInherited, preserve);
                         regKey.SetAccessControl(acl);
-                        Logger.WriteLine("Info", $"Successfully changed inheritance of registry key.");
+                        Logger.WriteLine("Info", $"Successfully changed inheritance of {_log_TargetItem}.");
                         return true;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to change inheritance of registry key '{this.Path}'. Exception: {e.ToString()}");
+                    Logger.WriteLine("Error", $"Failed to change inheritance of {_log_TargetItem}. Exception: {e.ToString()}");
                     Logger.WriteRaw(e.Message);
                 }
             }

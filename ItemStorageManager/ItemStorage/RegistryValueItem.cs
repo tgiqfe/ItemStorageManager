@@ -14,6 +14,8 @@ namespace ItemStorageManager.ItemStorage
         public object Data { get; set; }
         public string DataAsString { get; set; }
 
+        const string _log_TargetItem = "registry value";
+
         public RegistryValueItem(string keyPath, string valueName)
         {
             this.Path = $"{keyPath}\\{valueName}";
@@ -92,6 +94,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Exists()
         {
+            Logger.WriteLine("Info", $"Checking existence of {_log_TargetItem} at path '{this.Path}', value '{this.Name}'.");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path))
             {
                 try
@@ -102,13 +105,18 @@ namespace ItemStorageManager.ItemStorage
                         return valueNames.Contains(this.Name);
                     }
                 }
-                catch { }
+                catch(Exception e) {
+
+                    Logger.WriteLine("Error", $"Failed to check existence of {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
 
         public bool Copy(string dstPath, bool overwrite)
         {
+            Logger.WriteLine("Info", $"Copying {_log_TargetItem}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
             using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
             using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
@@ -117,16 +125,22 @@ namespace ItemStorageManager.ItemStorage
                     if (overwrite || !dstKey.GetValueNames().Contains(this.Name))
                     {
                         dstKey.SetValue(this.Name, this.Data, this.ValueKind);
+                        Logger.WriteLine("Info", $"Successfully copied {_log_TargetItem}.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to copy {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
 
         public bool Copy(string dstPath, string dstName, bool overwrite)
         {
+            Logger.WriteLine("Info", $"Copying {_log_TargetItem}. From '{this.Path}' '{this.Name}' to '{dstPath}' '{dstName}', overwrite: {overwrite}.");
             using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path))
             using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
@@ -135,16 +149,22 @@ namespace ItemStorageManager.ItemStorage
                     if (overwrite || !dstKey.GetValueNames().Contains(dstName))
                     {
                         dstKey.SetValue(dstName, this.Data, this.ValueKind);
+                        Logger.WriteLine("Info", $"Successfully copied {_log_TargetItem}.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to copy {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
 
         public bool Delete()
         {
+            Logger.WriteLine("Info", $"Deleting {_log_TargetItem}. '{this.Path}'");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -152,10 +172,15 @@ namespace ItemStorageManager.ItemStorage
                     if (regKey != null)
                     {
                         regKey.DeleteValue(this.Name);
+                        Logger.WriteLine("Info", $"Successfully deleted {_log_TargetItem}.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to delete {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
@@ -167,6 +192,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Move(string dstPath)
         {
+            Logger.WriteLine("Info", $"Moving {_log_TargetItem}. value '{this.Name}'. From '{this.Path}' to '{dstPath}'.");
             using (var srcKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             using (var dstKey = RegistryFunctions.GetRegistryKey(dstPath, true, true))
             {
@@ -176,15 +202,21 @@ namespace ItemStorageManager.ItemStorage
                     var valueKind = srcKey.GetValueKind(this.Name);
                     dstKey.SetValue(this.Name, valueData, valueKind);
                     srcKey.DeleteValue(this.Name);
+                    Logger.WriteLine("Info", $"Successfully moved {_log_TargetItem}.");
                     return true;
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to move {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
 
         public bool Rename(string newName)
         {
+            Logger.WriteLine("Info", $"Renaming {_log_TargetItem}. Key {this.Path}. From '{this.Name}' to '{newName}'.");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -194,9 +226,14 @@ namespace ItemStorageManager.ItemStorage
                     regKey.SetValue(newName, valueData, valueKind);
                     regKey.DeleteValue(this.Name);
                     this.Name = newName;
+                    Logger.WriteLine("Info", $"Successfully renamed {_log_TargetItem}.");
                     return true;
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to rename {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
