@@ -164,9 +164,9 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        public bool Delete()
+        public bool Remove()
         {
-            Logger.WriteLine("Info", $"Deleting {_log_TargetItem}. '{this.Path}'");
+            Logger.WriteLine("Info", $"Removing {_log_TargetItem}. '{this.Path}'");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -174,22 +174,22 @@ namespace ItemStorageManager.ItemStorage
                     if (regKey != null)
                     {
                         regKey.DeleteValue(this.Name);
-                        Logger.WriteLine("Info", $"Successfully deleted {_log_TargetItem}.");
+                        Logger.WriteLine("Info", $"Successfully removed {_log_TargetItem}.");
                         return true;
                     }
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to delete {_log_TargetItem}. Exception: {e.ToString()}");
+                    Logger.WriteLine("Error", $"Failed to remove {_log_TargetItem}. Exception: {e.ToString()}");
                     Logger.WriteRaw(e.Message);
                 }
             }
             return false;
         }
 
-        public bool Remove()
+        public bool Delete()
         {
-            return Delete();
+            return Remove();
         }
 
         public bool Move(string dstPath)

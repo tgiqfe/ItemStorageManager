@@ -121,26 +121,26 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        public bool Delete()
+        public bool Remove()
         {
-            Logger.WriteLine("Info", $"Deleting {_log_TargetItem}. '{this.Path}'");
+            Logger.WriteLine("Info", $"Removing {_log_TargetItem}. '{this.Path}'");
             try
             {
                 File.Delete(this.Path);
-                Logger.WriteLine("Info", $"Successfully deleted {_log_TargetItem}.");
+                Logger.WriteLine("Info", $"Successfully removed {_log_TargetItem}.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to delete {_log_TargetItem}. Exception: {e.ToString()}");
+                Logger.WriteLine("Error", $"Failed to remove {_log_TargetItem}. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;
         }
 
-        public bool Remove()
+        public bool Delete()
         {
-            return this.Delete();
+            return this.Remove();
         }
 
         public bool Move(string dstPath)
