@@ -38,6 +38,11 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
+                var parent = System.IO.Path.GetDirectoryName(newPath);
+                if (!Directory.Exists(parent))
+                {
+                    Directory.CreateDirectory(parent);
+                }
                 File.CreateText(newPath).Close();
                 return true;
             }
@@ -46,6 +51,16 @@ namespace ItemStorageManager.ItemStorage
         }
 
         public static bool New(string newParentPath, string newPath)
+        {
+            return New(System.IO.Path.Combine(newParentPath, newPath));
+        }
+
+        public static bool Add(string newPAth)
+        {
+            return New(newPAth);
+        }
+
+        public static bool Add(string newParentPath, string newPath)
         {
             return New(System.IO.Path.Combine(newParentPath, newPath));
         }

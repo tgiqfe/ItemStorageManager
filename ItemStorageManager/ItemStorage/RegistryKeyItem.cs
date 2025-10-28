@@ -45,6 +45,11 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        public static bool Add(string newPath)
+        {
+            return New(newPath);
+        }
+
         public static bool Load(string keyName, string hiveFile)
         {
             try

@@ -85,6 +85,11 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        public static bool Add(string newPath)
+        {
+            return New(newPath);
+        }
+
         #region from IBaseItem
 
         public bool Exists()
