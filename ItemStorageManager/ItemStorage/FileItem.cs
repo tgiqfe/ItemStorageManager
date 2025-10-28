@@ -36,17 +36,23 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool New(string newPath)
         {
+            Logger.WriteLine("Info", $"Creating new file at path '{newPath}'.");
             try
-            {
+            {   
                 var parent = System.IO.Path.GetDirectoryName(newPath);
                 if (!Directory.Exists(parent))
                 {
                     Directory.CreateDirectory(parent);
                 }
                 File.CreateText(newPath).Close();
+                Logger.WriteLine("Info", $"Successfully created new file.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to create new file. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
@@ -137,6 +143,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Grant(string account, string rights, string accessType, string inheritance = null, string propagation = null)
         {
+            Logger.WriteLine("Info", $"Granting access rule to file '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'.");
             try
             {
                 var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForFile();
@@ -144,14 +151,20 @@ namespace ItemStorageManager.ItemStorage
                 var acl = fi.GetAccessControl();
                 acl.AddAccessRule(newRule);
                 fi.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully granted access rule to file.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to grant access rule to file. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
         public bool Grant(string accessRuleText)
         {
+            Logger.WriteLine("Info", $"Granting access rule '{accessRuleText}' to file '{this.Path}'.");
             try
             {
                 var newRule = new AccessRuleSummary(accessRuleText).ToAccessRuleForFile();
@@ -159,9 +172,14 @@ namespace ItemStorageManager.ItemStorage
                 var acl = fi.GetAccessControl();
                 acl.AddAccessRule(newRule);
                 fi.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully granted access rule.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to grant access rule to file. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
@@ -213,19 +231,19 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
+            Logger.WriteLine("Info", $"Changing owner of file '{this.Path}' to '{newOwner}'.");
             try
             {
-                Logger.WriteLine("Info", $"Changing owner of file '{this.Path}' to '{newOwner}'.");
                 var fi = new FileInfo(this.Path);
                 var acl = fi.GetAccessControl();
                 acl.SetOwner(new NTAccount(newOwner));
                 fi.SetAccessControl(acl);
-                Logger.WriteLine("Info", $"Successfully changed owner of file '{this.Path}' to '{newOwner}'.");
+                Logger.WriteLine("Info", $"Successfully changed owner of file.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to change owner of file '{this.Path}' to '{newOwner}'. Exception: {e.Message}");
+                Logger.WriteLine("Error", $"Failed to change owner of file. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;
@@ -233,15 +251,21 @@ namespace ItemStorageManager.ItemStorage
 
         public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
+            Logger.WriteLine("Info", $"Changing inheritance of file '{this.Path}' to '{isInherited}', PreserveExistingRules='{preserve}'.");
             try
             {
                 var fi = new FileInfo(this.Path);
                 var acl = fi.GetAccessControl();
                 acl.SetAccessRuleProtection(!isInherited, preserve);
                 fi.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully changed inheritance of file.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to change inheritance of file. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
@@ -252,18 +276,18 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool SetAttributes(string attributes)
         {
+            Logger.WriteLine("Info", $"Setting attributes of file '{this.Path}' to '{attributes}'.");
             try
             {
-                Logger.WriteLine("Info", $"Setting attributes of file '{this.Path}' to '{attributes}'.");)
                 var fi = new FileInfo(this.Path);
                 fi.Attributes = AttributeFunctions.ParseFileAttributes(attributes, fi.Attributes);
                 this.Attributes = fi.Attributes.ToString();
-                Logger.WriteLine("Info", $"Successfully set attributes of file '{this.Path}' to '{attributes}'.");
+                Logger.WriteLine("Info", $"Successfully set attributes of file.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to set attributes of file '{this.Path}' to '{attributes}'. Exception: {e.Message}");
+                Logger.WriteLine("Error", $"Failed to set attributes of file. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;

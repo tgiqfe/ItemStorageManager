@@ -70,12 +70,18 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool New(string newPath)
         {
+            Logger.WriteLine("Info", $"Creating new directory at path '{newPath}'.");
             try
             {
                 Directory.CreateDirectory(newPath);
+                Logger.WriteLine("Info", $"Successfully created new directory.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to create new directory. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
@@ -144,6 +150,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool Grant(string account, string rights, string accessType, string inheritance, string propagation)
         {
+            Logger.WriteLine("Info", $"Granting access rule to directory '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'.");
             try
             {
                 var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForDirectory();
@@ -151,14 +158,20 @@ namespace ItemStorageManager.ItemStorage
                 var acl = di.GetAccessControl();
                 acl.AddAccessRule(newRule);
                 di.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully granted access rule to directory.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to grant access rule to directory. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
         public bool Grant(string accessRuleText)
         {
+            Logger.WriteLine("Info", $"Granting access rule to directory '{this.Path}': '{accessRuleText}'.");
             try
             {
                 var newRule = new AccessRuleSummary(accessRuleText).ToAccessRuleForDirectory();
@@ -166,9 +179,14 @@ namespace ItemStorageManager.ItemStorage
                 var acl = di.GetAccessControl();
                 acl.AddAccessRule(newRule);
                 di.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully granted access rule to directory.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to grant access rule to directory. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
@@ -220,19 +238,19 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
+            Logger.WriteLine("Info", $"Changing owner of directory '{this.Path}' to '{newOwner}'.");
             try
             {
-                Logger.WriteLine("Info", $"Changing owner of directory '{this.Path}' to '{newOwner}'.");
                 var di = new DirectoryInfo(this.Path);
                 var acl = di.GetAccessControl();
                 acl.SetOwner(new NTAccount(newOwner));
                 di.SetAccessControl(acl);
-                Logger.WriteLine("Info", $"Successfully changed owner of directory '{this.Path}' to '{newOwner}'.");
+                Logger.WriteLine("Info", $"Successfully changed owner of directory.");
                 return true;
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to change owner of directory '{this.Path}' to '{newOwner}'. Exception: {e.Message}");
+                Logger.WriteLine("Error", $"Failed to change owner of directory. Exception: {e.ToString()}");
                 Logger.WriteRaw(e.Message);
             }
             return false;
@@ -240,15 +258,21 @@ namespace ItemStorageManager.ItemStorage
 
         public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
+            Logger.WriteLine("Info", $"Changing inheritance of directory '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
             try
             {
                 var di = new DirectoryInfo(this.Path);
                 var acl = di.GetAccessControl();
                 acl.SetAccessRuleProtection(!isInherited, preserve);
                 di.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully changed inheritance of directory.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to change inheritance of directory. Exception: {e.ToString()}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
@@ -259,9 +283,9 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool SetAttributes(string attributes)
         {
+            Logger.WriteLine("Info", $"Setting attributes of directory '{this.Path}' to '{attributes}'.");
             try
             {
-                Logger.WriteLine("Info", $"Setting attributes of directory '{this.Path}' to '{attributes}'.");
                 var di = new DirectoryInfo(this.Path);
                 di.Attributes = AttributeFunctions.ParseFileAttributes(attributes, di.Attributes);
                 this.Attributes = di.Attributes.ToString();

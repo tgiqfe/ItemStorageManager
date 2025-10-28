@@ -31,16 +31,22 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool New(string newPath)
         {
+            Logger.WriteLine("Info", $"Creating new registry key at '{newPath}'.");
             using (var regKey = RegistryFunctions.GetRegistryKey(newPath, true, true))
             {
                 try
                 {
                     if (regKey != null)
                     {
+                        Logger.WriteLine("Info", $"Successfully created new registry key.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to create new registry key. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
@@ -226,28 +232,35 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
-        public bool Grant(string account, string rights, string accessType, string inheritance, string propageteToSubItems)
+        public bool Grant(string account, string rights, string accessType, string inheritance, string propagation)
         {
+            Logger.WriteLine("Info", $"Granting access rule to registry key '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'.");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
                 {
                     if (regKey != null)
                     {
-                        var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propageteToSubItems).ToAccessRuleForRegistryKey();
+                        var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForRegistryKey();
                         var acl = regKey.GetAccessControl();
                         acl.AddAccessRule(newRule);
                         regKey.SetAccessControl(acl);
+                        Logger.WriteLine("Info", $"Successfully granted access rule to registry key.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to grant access rule to registry key. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
 
         public bool Grant(string accessRuleText)
         {
+            Logger.WriteLine("Info", $"Granting access rule to registry key '{this.Path}': {accessRuleText}.");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -258,10 +271,15 @@ namespace ItemStorageManager.ItemStorage
                         var acl = regKey.GetAccessControl();
                         acl.AddAccessRule(newRule);
                         regKey.SetAccessControl(acl);
+                        Logger.WriteLine("Info", $"Successfully granted access rule to registry key.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to grant access rule to registry key. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
@@ -324,9 +342,9 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
+            Logger.WriteLine("Info", $"Changing owner of registry key '{this.Path}' to '{newOwner}'.");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
-                Logger.WriteLine("Info", $"Changing owner of registry key '{this.Path}' to '{newOwner}'.");
                 try
                 {
                     if (regKey != null)
@@ -349,6 +367,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool ChangeInherited(bool isInherited, bool preserve = true)
         {
+            Logger.WriteLine("Info", $"Changing inheritance of registry key '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -358,10 +377,15 @@ namespace ItemStorageManager.ItemStorage
                         var acl = regKey.GetAccessControl();
                         acl.SetAccessRuleProtection(!isInherited, preserve);
                         regKey.SetAccessControl(acl);
+                        Logger.WriteLine("Info", $"Successfully changed inheritance of registry key.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to change inheritance of registry key '{this.Path}'. Exception: {e.ToString()}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }
