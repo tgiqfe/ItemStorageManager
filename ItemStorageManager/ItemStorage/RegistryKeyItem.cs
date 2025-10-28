@@ -326,6 +326,7 @@ namespace ItemStorageManager.ItemStorage
         {
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
+                Logger.WriteLine("Info", $"Changing owner of registry key '{this.Path}' to '{newOwner}'.");
                 try
                 {
                     if (regKey != null)
@@ -333,10 +334,15 @@ namespace ItemStorageManager.ItemStorage
                         var acl = regKey.GetAccessControl();
                         acl.SetOwner(new NTAccount(newOwner));
                         regKey.SetAccessControl(acl);
+                        Logger.WriteLine("Info", $"Successfully changed owner of registry key '{this.Path}' to '{newOwner}'.");
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception e)
+                {
+                    Logger.WriteLine("Error", $"Failed to change owner of registry key '{this.Path}' to '{newOwner}'. Exception: {e.Message}");
+                    Logger.WriteRaw(e.Message);
+                }
             }
             return false;
         }

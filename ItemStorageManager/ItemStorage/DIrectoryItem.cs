@@ -1,12 +1,6 @@
 ﻿using Microsoft.VisualBasic.FileIO;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Security.AccessControl;
 using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ItemStorageManager.ItemStorage
 {
@@ -228,13 +222,19 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
+                Logger.WriteLine("Info", $"Changing owner of directory '{this.Path}' to '{newOwner}'.");
                 var di = new DirectoryInfo(this.Path);
                 var acl = di.GetAccessControl();
                 acl.SetOwner(new NTAccount(newOwner));
                 di.SetAccessControl(acl);
+                Logger.WriteLine("Info", $"Successfully changed owner of directory '{this.Path}' to '{newOwner}'.");
                 return true;
             }
-            catch { }
+            catch (Exception e)
+            {
+                Logger.WriteLine("Error", $"Failed to change owner of directory '{this.Path}' to '{newOwner}'. Exception: {e.Message}");
+                Logger.WriteRaw(e.Message);
+            }
             return false;
         }
 
