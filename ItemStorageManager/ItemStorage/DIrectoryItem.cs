@@ -324,7 +324,13 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
+            if (string.IsNullOrEmpty(newOwner))
+            {
+                Logger.WriteLine("Warning", $"Skip change owner to {_log_target}.");
+                return false;
+            }
             Logger.WriteLine("Info", $"Changing owner of {_log_target}. '{this.Path}' to '{newOwner}'");
+            
             try
             {
                 Logger.WriteLine("Info", "Adjusting token privilegs (SeTakeOwnershipPrivilege, SeRestorePrivilege, SeBackupPrivilege)");
@@ -353,14 +359,20 @@ namespace ItemStorageManager.ItemStorage
         /// <param name="isInherited"></param>
         /// <param name="preserve"></param>
         /// <returns></returns>
-        public bool ChangeInherited(bool isInherited, bool preserve = true)
+        public bool ChangeInherited(bool? isInherited, bool preserve = true)
         {
+            if (isInherited == null)
+            {
+                Logger.WriteLine("Warning", $"Skip change inherited to {_log_target}.");
+                return false;
+            }
             Logger.WriteLine("Info", $"Changing inheritance of {_log_target}. '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
+            
             try
             {
                 var di = new DirectoryInfo(this.Path);
                 var acl = di.GetAccessControl();
-                acl.SetAccessRuleProtection(!isInherited, preserve);
+                acl.SetAccessRuleProtection(!(bool)isInherited, preserve);
                 di.SetAccessControl(acl);
                 Logger.WriteLine("Info", $"Successfully changed inheritance of {_log_target}.");
                 return true;
@@ -380,7 +392,13 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool SetAttributes(string attributes)
         {
+            if (string.IsNullOrEmpty(attributes))
+            {
+                Logger.WriteLine("Warning", $"Skip set attributes to {_log_target}.");
+                return false;
+            }
             Logger.WriteLine("Info", $"Setting attributes of directory '{this.Path}' to '{attributes}'.");
+            
             try
             {
                 var di = new DirectoryInfo(this.Path);

@@ -430,7 +430,13 @@ namespace ItemStorageManager.ItemStorage
         /// <returns></returns>
         public bool ChangeOwner(string newOwner)
         {
+            if (string.IsNullOrEmpty(newOwner))
+            {
+                Logger.WriteLine("Warning", $"Skip change owner to {_log_target}.");
+                return false;
+            }
             Logger.WriteLine("Info", $"Changing owner of {_log_target}. '{this.Path}' to '{newOwner}'");
+            
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -464,9 +470,15 @@ namespace ItemStorageManager.ItemStorage
         /// <param name="isInherited"></param>
         /// <param name="preserve"></param>
         /// <returns></returns>
-        public bool ChangeInherited(bool isInherited, bool preserve = true)
+        public bool ChangeInherited(bool? isInherited, bool preserve = true)
         {
+            if (isInherited == null)
+            {
+                Logger.WriteLine("Warning", $"Skip change inherited to {_log_target}.");
+                return false;
+            }
             Logger.WriteLine("Info", $"Changing inheritance of {_log_target}. '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
+            
             using (var regKey = RegistryFunctions.GetRegistryKey(this.Path, false, true))
             {
                 try
@@ -474,7 +486,7 @@ namespace ItemStorageManager.ItemStorage
                     if (regKey != null)
                     {
                         var acl = regKey.GetAccessControl();
-                        acl.SetAccessRuleProtection(!isInherited, preserve);
+                        acl.SetAccessRuleProtection(!(bool)isInherited, preserve);
                         regKey.SetAccessControl(acl);
                         Logger.WriteLine("Info", $"Successfully changed inheritance of {_log_target}.");
                         return true;
