@@ -40,6 +40,11 @@ namespace ItemStorageManager.ItemStorage
             this.SecurityBlock = File.Exists($"{path}:Zone.Identifier");
         }
 
+        /// <summary>
+        /// Create new empty file.
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
         public static bool New(string newPath)
         {
             Logger.WriteLine("Info", $"Creating new {_log_target}. '{newPath}'");
@@ -62,16 +67,33 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Create new empty file.
+        /// </summary>
+        /// <param name="newParentPath"></param>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
         public static bool New(string newParentPath, string newPath)
         {
             return New(System.IO.Path.Combine(newParentPath, newPath));
         }
 
+        /// <summary>
+        /// Create new empty file. (Alias of New)
+        /// </summary>
+        /// <param name="newPAth"></param>
+        /// <returns></returns>
         public static bool Add(string newPAth)
         {
             return New(newPAth);
         }
 
+        /// <summary>
+        /// Create new empty file. (Alias of New)
+        /// </summary>
+        /// <param name="newParentPath"></param>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
         public static bool Add(string newParentPath, string newPath)
         {
             return New(System.IO.Path.Combine(newParentPath, newPath));
@@ -98,12 +120,22 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Exists check file.
+        /// </summary>
+        /// <returns></returns>
         public bool Exists()
         {
             Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{this.Path}'.");
             return File.Exists(this.Path);
         }
 
+        /// <summary>
+        /// Copy file.
+        /// </summary>
+        /// <param name="dstPath"></param>
+        /// <param name="overwrite"></param>
+        /// <returns></returns>
         public bool Copy(string dstPath, bool overwrite)
         {
             Logger.WriteLine("Info", $"Copying {_log_target}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
@@ -121,6 +153,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Remove file.
+        /// </summary>
+        /// <returns></returns>
         public bool Remove()
         {
             Logger.WriteLine("Info", $"Removing {_log_target}. '{this.Path}'");
@@ -138,6 +174,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Remove file. (Alias of Remove)
+        /// </summary>
+        /// <returns></returns>
         public bool Delete()
         {
             return this.Remove();
@@ -283,6 +323,11 @@ namespace ItemStorageManager.ItemStorage
             Logger.WriteLine("Info", $"Changing owner of {_log_target}. '{this.Path}' to '{newOwner}'");
             try
             {
+                Logger.WriteLine("Info", "Adjusting token privilegs (SeTakeOwnershipPrivilege, SeRestorePrivilege, SeBackupPrivilege)");
+                ProcessPrivilege.AdjustToken(Privilege.SeTakeOwnershipPrivilege);
+                ProcessPrivilege.AdjustToken(Privilege.SeRestorePrivilege);
+                ProcessPrivilege.AdjustToken(Privilege.SeBackupPrivilege);
+
                 var fi = new FileInfo(this.Path);
                 var acl = fi.GetAccessControl();
                 acl.SetOwner(new NTAccount(newOwner));

@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic.FileIO;
+﻿using ItemStorageManager.Functions;
+using Microsoft.VisualBasic.FileIO;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
@@ -88,6 +89,11 @@ namespace ItemStorageManager.ItemStorage
             return -1;
         }
 
+        /// <summary>
+        /// Create new empty directory.
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
         public static bool New(string newPath)
         {
             Logger.WriteLine("Info", $"Creating new {_log_target}. '{newPath}'");
@@ -105,17 +111,32 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Create new empty directory. (Alias of New)
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
         public static bool Add(string newPath)
         {
             return New(newPath);
         }
 
+        /// <summary>
+        /// Exists check directory.
+        /// </summary>
+        /// <returns></returns>
         public bool Exists()
         {
             Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{this.Path}'.");
             return Directory.Exists(this.Path);
         }
 
+        /// <summary>
+        /// Copy directory.
+        /// </summary>
+        /// <param name="dstPath"></param>
+        /// <param name="overwrite"></param>
+        /// <returns></returns>
         public bool Copy(string dstPath, bool overwrite)
         {
             Logger.WriteLine("Info", $"Copying {_log_target}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
@@ -133,6 +154,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Remove directory.
+        /// </summary>
+        /// <returns></returns>
         public bool Remove()
         {
             Logger.WriteLine("Info", $"Removing {_log_target}. '{this.Path}'");
@@ -150,6 +175,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Remove directory. (Alias of Remove)
+        /// </summary>
+        /// <returns></returns>
         public bool Delete()
         {
             return Remove();
@@ -298,6 +327,11 @@ namespace ItemStorageManager.ItemStorage
             Logger.WriteLine("Info", $"Changing owner of {_log_target}. '{this.Path}' to '{newOwner}'");
             try
             {
+                Logger.WriteLine("Info", "Adjusting token privilegs (SeTakeOwnershipPrivilege, SeRestorePrivilege, SeBackupPrivilege)");
+                ProcessPrivilege.AdjustToken(Privilege.SeTakeOwnershipPrivilege);
+                ProcessPrivilege.AdjustToken(Privilege.SeRestorePrivilege);
+                ProcessPrivilege.AdjustToken(Privilege.SeBackupPrivilege);
+
                 var di = new DirectoryInfo(this.Path);
                 var acl = di.GetAccessControl();
                 acl.SetOwner(new NTAccount(newOwner));

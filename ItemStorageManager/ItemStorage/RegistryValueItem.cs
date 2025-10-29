@@ -94,6 +94,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Exists the specified registry value.
+        /// </summary>
+        /// <returns></returns>
         public bool Exists()
         {
             Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{this.Path}', value '{this.Name}'.");
@@ -116,6 +120,12 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Copy the registry value. new key.
+        /// </summary>
+        /// <param name="dstPath"></param>
+        /// <param name="overwrite"></param>
+        /// <returns></returns>
         public bool Copy(string dstPath, bool overwrite)
         {
             Logger.WriteLine("Info", $"Copying {_log_target}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
@@ -140,6 +150,13 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Copy the registry value. new key and new name.
+        /// </summary>
+        /// <param name="dstPath"></param>
+        /// <param name="dstName"></param>
+        /// <param name="overwrite"></param>
+        /// <returns></returns>
         public bool Copy(string dstPath, string dstName, bool overwrite)
         {
             Logger.WriteLine("Info", $"Copying {_log_target}. From '{this.Path}' '{this.Name}' to '{dstPath}' '{dstName}', overwrite: {overwrite}.");
@@ -164,6 +181,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Remove the registry value.
+        /// </summary>
+        /// <returns></returns>
         public bool Remove()
         {
             Logger.WriteLine("Info", $"Removing {_log_target}. '{this.Path}'");
@@ -187,6 +208,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Remove the registry value. (alias of Remove)
+        /// </summary>
+        /// <returns></returns>
         public bool Delete()
         {
             return Remove();

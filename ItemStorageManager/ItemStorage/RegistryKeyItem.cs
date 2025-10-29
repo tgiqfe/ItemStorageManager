@@ -33,6 +33,11 @@ namespace ItemStorageManager.ItemStorage
             }
         }
 
+        /// <summary>
+        /// Create new registry key.
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
         public static bool New(string newPath)
         {
             Logger.WriteLine("Info", $"Creating new {_log_target}. '{newPath}'");
@@ -55,6 +60,11 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Create new registry key. (Alias of New)
+        /// </summary>
+        /// <param name="newPath"></param>
+        /// <returns></returns>
         public static bool Add(string newPath)
         {
             return New(newPath);
@@ -80,6 +90,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Exists registry key.
+        /// </summary>
+        /// <returns></returns>
         public bool Exists()
         {
             Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{this.Path}'.");
@@ -101,6 +115,12 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Copy registry key.
+        /// </summary>
+        /// <param name="dstPath"></param>
+        /// <param name="overwrite"></param>
+        /// <returns></returns>
         public bool Copy(string dstPath, bool overwrite)
         {
             Logger.WriteLine("Info", $"Copying {_log_target}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
@@ -122,6 +142,11 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Copy registry key recursive function.
+        /// </summary>
+        /// <param name="srcKey"></param>
+        /// <param name="dstKey"></param>
         private void CopyRegistryKey(RegistryKey srcKey, RegistryKey dstKey)
         {
             foreach (var valueName in srcKey.GetValueNames())
@@ -172,6 +197,10 @@ namespace ItemStorageManager.ItemStorage
             }
         }
 
+        /// <summary>
+        /// Remove registry key.
+        /// </summary>
+        /// <returns></returns>
         public bool Remove()
         {
             Logger.WriteLine("Info", $"Removing {_log_target}. '{this.Path}'");
@@ -195,6 +224,10 @@ namespace ItemStorageManager.ItemStorage
             return false;
         }
 
+        /// <summary>
+        /// Remove registry key. (Alias of Remove)
+        /// </summary>
+        /// <returns></returns>
         public bool Delete()
         {
             return Remove();
@@ -404,6 +437,11 @@ namespace ItemStorageManager.ItemStorage
                 {
                     if (regKey != null)
                     {
+                        Logger.WriteLine("Info", "Adjusting token privilegs (SeTakeOwnershipPrivilege, SeRestorePrivilege, SeBackupPrivilege)");
+                        ProcessPrivilege.AdjustToken(Privilege.SeTakeOwnershipPrivilege);
+                        ProcessPrivilege.AdjustToken(Privilege.SeRestorePrivilege);
+                        ProcessPrivilege.AdjustToken(Privilege.SeBackupPrivilege);
+
                         var acl = regKey.GetAccessControl();
                         acl.SetOwner(new NTAccount(newOwner));
                         regKey.SetAccessControl(acl);
