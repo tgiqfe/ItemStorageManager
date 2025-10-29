@@ -94,10 +94,10 @@ namespace ItemStorageManager.ItemStorage
         /// Exists registry key.
         /// </summary>
         /// <returns></returns>
-        public bool Exists()
+        public static bool Exists(string path)
         {
-            Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{this.Path}'.");
-            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path))
+            Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{path}'.");
+            using (var regKey = RegistryFunctions.GetRegistryKey(path))
             {
                 try
                 {

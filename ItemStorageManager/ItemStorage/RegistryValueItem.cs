@@ -98,17 +98,17 @@ namespace ItemStorageManager.ItemStorage
         /// Exists the specified registry value.
         /// </summary>
         /// <returns></returns>
-        public bool Exists()
+        public static bool Exists(string path, string name)
         {
-            Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{this.Path}', value '{this.Name}'.");
-            using (var regKey = RegistryFunctions.GetRegistryKey(this.Path))
+            Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{path}', value '{name}'.");
+            using (var regKey = RegistryFunctions.GetRegistryKey(path))
             {
                 try
                 {
                     if (regKey != null)
                     {
                         var valueNames = regKey.GetValueNames();
-                        return valueNames.Contains(this.Name);
+                        return valueNames.Contains(name);
                     }
                 }
                 catch(Exception e) {

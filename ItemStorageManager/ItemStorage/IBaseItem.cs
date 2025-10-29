@@ -6,7 +6,6 @@
         string Path { get; set; }
         string Name { get; set; }
 
-        bool Exists();
         bool Copy(string dstPath, bool overwrite);
         bool Remove();
         bool Delete();

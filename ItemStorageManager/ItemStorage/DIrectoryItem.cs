@@ -125,10 +125,10 @@ namespace ItemStorageManager.ItemStorage
         /// Exists check directory.
         /// </summary>
         /// <returns></returns>
-        public bool Exists()
+        public static bool Exists(string path)
         {
-            Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{this.Path}'.");
-            return Directory.Exists(this.Path);
+            Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{path}'.");
+            return Directory.Exists(path);
         }
 
         /// <summary>
