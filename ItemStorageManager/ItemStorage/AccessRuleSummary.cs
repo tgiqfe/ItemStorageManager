@@ -80,26 +80,28 @@ namespace ItemStorageManager.ItemStorage
         {
             return new FileSystemAccessRule(
                 new NTAccount(Account),
-                AccessRuleComponents.ParseFileSystemRights(Rights),
-                AccessRuleComponents.ParseAccessControlType(AccessType));
+                AccessRuleComponents.FileRightsMap<FileSystemRights>.StringToValue(this.Rights),
+                AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
         }
 
         public FileSystemAccessRule ToAccessRuleForDirectory()
         {
             return new FileSystemAccessRule(
                 new NTAccount(Account),
-                AccessRuleComponents.ParseFileSystemRights(Rights),
-                AccessRuleComponents.ParseInheritanceFlags(Inheritance),
-                AccessRuleComponents.ParsePropagationFlags(Propagation),
-                AccessRuleComponents.ParseAccessControlType(AccessType));
+                AccessRuleComponents.FileRightsMap<FileSystemRights>.StringToValue(this.Rights),
+                AccessRuleComponents.InheritanceFlagsMap<InheritanceFlags>.StringToValue(this.Inheritance),
+                AccessRuleComponents.PropagationFlagsMap<PropagationFlags>.StringToValue(this.Propagation),
+                AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
         }
 
         public RegistryAccessRule ToAccessRuleForRegistryKey()
         {
             return new RegistryAccessRule(
                 new NTAccount(Account),
-                AccessRuleComponents.ParseRegistryRights(Rights),
-                AccessRuleComponents.ParseAccessControlType(AccessType));
+                AccessRuleComponents.RegistryRightsMap<RegistryRights>.StringToValue(this.Rights),
+                AccessRuleComponents.InheritanceFlagsMap<InheritanceFlags>.StringToValue(this.Inheritance),
+                AccessRuleComponents.PropagationFlagsMap<PropagationFlags>.StringToValue(this.Propagation),
+                AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
         }
     }
 }

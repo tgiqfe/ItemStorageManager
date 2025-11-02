@@ -251,7 +251,7 @@ namespace ItemStorageManager.ItemStorage
         }
 
 
-
+        /*
         #region Enum parameter parsing maps.
 
         private static Dictionary<string, FileSystemRights> _fileRightsMap = null;
@@ -421,5 +421,6 @@ namespace ItemStorageManager.ItemStorage
                 _accessTypeMap[accessTypeText] :
                 AccessControlType.Allow;
         }
+        */
     }
 }
