@@ -80,26 +80,26 @@ namespace ItemStorageManager.ItemStorage
         {
             return new FileSystemAccessRule(
                 new NTAccount(Account),
-                AccessRuleMapping.ParseFileSystemRights(Rights),
-                AccessRuleMapping.ParseAccessControlType(AccessType));
+                AccessRuleComponents.ParseFileSystemRights(Rights),
+                AccessRuleComponents.ParseAccessControlType(AccessType));
         }
 
         public FileSystemAccessRule ToAccessRuleForDirectory()
         {
             return new FileSystemAccessRule(
                 new NTAccount(Account),
-                AccessRuleMapping.ParseFileSystemRights(Rights),
-                AccessRuleMapping.ParseInheritanceFlags(Inheritance),
-                AccessRuleMapping.ParsePropagationFlags(Propagation),
-                AccessRuleMapping.ParseAccessControlType(AccessType));
+                AccessRuleComponents.ParseFileSystemRights(Rights),
+                AccessRuleComponents.ParseInheritanceFlags(Inheritance),
+                AccessRuleComponents.ParsePropagationFlags(Propagation),
+                AccessRuleComponents.ParseAccessControlType(AccessType));
         }
 
         public RegistryAccessRule ToAccessRuleForRegistryKey()
         {
             return new RegistryAccessRule(
                 new NTAccount(Account),
-                AccessRuleMapping.ParseRegistryRights(Rights),
-                AccessRuleMapping.ParseAccessControlType(AccessType));
+                AccessRuleComponents.ParseRegistryRights(Rights),
+                AccessRuleComponents.ParseAccessControlType(AccessType));
         }
     }
 }
