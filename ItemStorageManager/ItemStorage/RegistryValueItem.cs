@@ -113,8 +113,8 @@ namespace ItemStorageManager.ItemStorage
                 }
                 catch(Exception e) {
 
-                    Logger.WriteLine("Error", $"Failed to check existence of {_log_target}. Exception: {e.ToString()}");
-                    Logger.WriteRaw(e.Message);
+                    Logger.WriteLine("Error", $"Failed to check existence of {_log_target}.");
+                    Logger.WriteRaw(e.ToString());
                 }
             }
             return false;
@@ -143,8 +143,8 @@ namespace ItemStorageManager.ItemStorage
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to copy {_log_target}. Exception: {e.ToString()}");
-                    Logger.WriteRaw(e.Message);
+                    Logger.WriteLine("Error", $"Failed to copy {_log_target}.");
+                    Logger.WriteRaw(e.ToString());
                 }
             }
             return false;
@@ -174,8 +174,8 @@ namespace ItemStorageManager.ItemStorage
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to copy {_log_target}. Exception: {e.ToString()}");
-                    Logger.WriteRaw(e.Message);
+                    Logger.WriteLine("Error", $"Failed to copy {_log_target}.");
+                    Logger.WriteRaw(e.ToString());
                 }
             }
             return false;
@@ -201,8 +201,8 @@ namespace ItemStorageManager.ItemStorage
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to remove {_log_target}. Exception: {e.ToString()}");
-                    Logger.WriteRaw(e.Message);
+                    Logger.WriteLine("Error", $"Failed to remove {_log_target}.");
+                    Logger.WriteRaw(e.ToString());
                 }
             }
             return false;
@@ -234,8 +234,8 @@ namespace ItemStorageManager.ItemStorage
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to move {_log_target}. Exception: {e.ToString()}");
-                    Logger.WriteRaw(e.Message);
+                    Logger.WriteLine("Error", $"Failed to move {_log_target}.");
+                    Logger.WriteRaw(e.ToString());
                 }
             }
             return false;
@@ -258,8 +258,8 @@ namespace ItemStorageManager.ItemStorage
                 }
                 catch (Exception e)
                 {
-                    Logger.WriteLine("Error", $"Failed to rename {_log_target}. Exception: {e.ToString()}");
-                    Logger.WriteRaw(e.Message);
+                    Logger.WriteLine("Error", $"Failed to rename {_log_target}.");
+                    Logger.WriteRaw(e.ToString());
                 }
             }
             return false;

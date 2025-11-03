@@ -61,8 +61,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to create new {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to create new {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -114,8 +114,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to remove security block from {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to remove security block from {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -147,8 +147,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to copy {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to copy {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -168,8 +168,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to remove {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to remove {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -194,8 +194,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to move {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to move {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -212,8 +212,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to rename {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to rename {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -233,8 +233,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to grant access rule to {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to grant access rule to {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -254,8 +254,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to grant access rule to {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to grant access rule to {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -282,8 +282,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to revoke access rules from {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to revoke access rules from {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -307,8 +307,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to revoke all access rules from {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to revoke all access rules from {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -343,8 +343,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to change owner of {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to change owner of {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -375,8 +375,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to change inheritance of {_log_target}. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to change inheritance of {_log_target}.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
@@ -405,8 +405,8 @@ namespace ItemStorageManager.ItemStorage
             }
             catch (Exception e)
             {
-                Logger.WriteLine("Error", $"Failed to set attributes of file. Exception: {e.ToString()}");
-                Logger.WriteRaw(e.Message);
+                Logger.WriteLine("Error", $"Failed to set attributes of file.");
+                Logger.WriteRaw(e.ToString());
             }
             return false;
         }
