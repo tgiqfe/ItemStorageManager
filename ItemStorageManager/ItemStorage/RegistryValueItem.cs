@@ -11,10 +11,11 @@ namespace ItemStorageManager.ItemStorage
         public string Path { get; set; }
         public string Name { get; set; }
         public string ValueKind { get; set; }
-        public object Data { get; set; }
-        public string DataAsString { get; set; }
+        public string Data { get; set; }
 
         #endregion
+
+        public object _dataObject { get; set; }
 
         const string _log_target = "registry value";
 
@@ -28,10 +29,10 @@ namespace ItemStorageManager.ItemStorage
                 {
                     var valueKind = regKey.GetValueKind(valueName);
                     this.ValueKind = RegistryFunctions.RegistryValueKindToString(valueKind);
-                    this.Data = valueKind == RegistryValueKind.ExpandString ?
+                    this._dataObject = valueKind == RegistryValueKind.ExpandString ?
                         regKey.GetValue(valueName, null, RegistryValueOptions.DoNotExpandEnvironmentNames) :
                         regKey.GetValue(valueName);
-                    this.DataAsString = RegistryFunctions.RegistryValueToString(this.Data, valueKind);
+                    this.Data = RegistryFunctions.RegistryValueToString(_dataObject, valueKind);
                 }
             }
         }
@@ -138,7 +139,7 @@ namespace ItemStorageManager.ItemStorage
                     if (overwrite || !dstKey.GetValueNames().Contains(this.Name))
                     {
                         var valueKind = RegistryFunctions.StringToValueKind(this.ValueKind);
-                        dstKey.SetValue(this.Name, this.Data, valueKind);
+                        dstKey.SetValue(this.Name, this._dataObject, valueKind);
                         Logger.WriteLine("Info", $"Successfully copied {_log_target}.");
                         return true;
                     }
@@ -170,7 +171,7 @@ namespace ItemStorageManager.ItemStorage
                     if (overwrite || !dstKey.GetValueNames().Contains(dstName))
                     {
                         var valueKind = RegistryFunctions.StringToValueKind(this.ValueKind);
-                        dstKey.SetValue(dstName, this.Data, valueKind);
+                        dstKey.SetValue(dstName, this._dataObject, valueKind);
                         Logger.WriteLine("Info", $"Successfully copied {_log_target}.");
                         return true;
                     }
