@@ -2,6 +2,7 @@
 
 namespace ItemStorageManager.ItemStorage
 {
+    /*
     internal class AccessRuleComponents
     {
         /// <summary>
@@ -249,4 +250,5 @@ namespace ItemStorageManager.ItemStorage
             }
         }
     }
+    */
 }

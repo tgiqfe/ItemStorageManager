@@ -78,30 +78,46 @@ namespace ItemStorageManager.ItemStorage
 
         public FileSystemAccessRule ToAccessRuleForFile()
         {
+            //return new FileSystemAccessRule(
+            //    new NTAccount(Account),
+            //    AccessRuleComponents.FileRightsMap<FileSystemRights>.StringToValue(this.Rights),
+            //    AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
             return new FileSystemAccessRule(
                 new NTAccount(Account),
-                AccessRuleComponents.FileRightsMap<FileSystemRights>.StringToValue(this.Rights),
-                AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
+                AccessRuleParser.StringToFileSystemRights(this.Rights),
+                AccessRuleParser.StringToAccessControlType(this.AccessType));
         }
 
         public FileSystemAccessRule ToAccessRuleForDirectory()
         {
+            //return new FileSystemAccessRule(
+            //    new NTAccount(Account),
+            //    AccessRuleComponents.FileRightsMap<FileSystemRights>.StringToValue(this.Rights),
+            //    AccessRuleComponents.InheritanceFlagsMap<InheritanceFlags>.StringToValue(this.Inheritance),
+            //    AccessRuleComponents.PropagationFlagsMap<PropagationFlags>.StringToValue(this.Propagation),
+            //    AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
             return new FileSystemAccessRule(
                 new NTAccount(Account),
-                AccessRuleComponents.FileRightsMap<FileSystemRights>.StringToValue(this.Rights),
-                AccessRuleComponents.InheritanceFlagsMap<InheritanceFlags>.StringToValue(this.Inheritance),
-                AccessRuleComponents.PropagationFlagsMap<PropagationFlags>.StringToValue(this.Propagation),
-                AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
+                AccessRuleParser.StringToFileSystemRights(this.Rights),
+                AccessRuleParser.StringToInheritanceFlags(this.Inheritance),
+                AccessRuleParser.StringToPropagationFlags(this.Propagation),
+                AccessRuleParser.StringToAccessControlType(this.AccessType));
         }
 
         public RegistryAccessRule ToAccessRuleForRegistryKey()
         {
+            //return new RegistryAccessRule(
+            //    new NTAccount(Account),
+            //    AccessRuleComponents.RegistryRightsMap<RegistryRights>.StringToValue(this.Rights),
+            //    AccessRuleComponents.InheritanceFlagsMap<InheritanceFlags>.StringToValue(this.Inheritance),
+            //    AccessRuleComponents.PropagationFlagsMap<PropagationFlags>.StringToValue(this.Propagation),
+            //    AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
             return new RegistryAccessRule(
                 new NTAccount(Account),
-                AccessRuleComponents.RegistryRightsMap<RegistryRights>.StringToValue(this.Rights),
-                AccessRuleComponents.InheritanceFlagsMap<InheritanceFlags>.StringToValue(this.Inheritance),
-                AccessRuleComponents.PropagationFlagsMap<PropagationFlags>.StringToValue(this.Propagation),
-                AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
+                AccessRuleParser.StringToRegistryRights(this.Rights),
+                AccessRuleParser.StringToInheritanceFlags(this.Inheritance),
+                AccessRuleParser.StringToPropagationFlags(this.Propagation),
+                AccessRuleParser.StringToAccessControlType(this.AccessType));
         }
     }
 }
