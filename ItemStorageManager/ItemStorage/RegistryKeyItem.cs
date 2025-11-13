@@ -74,7 +74,8 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                ItemStorageManager.Functions.RegistryHive.Load(keyName, hiveFile);
+                //ItemStorageManager.Functions.RegistryHive.Load(keyName, hiveFile);
+                RegistryHelper.Load(keyName, hiveFile);
             }
             catch { }
             return false;
@@ -84,7 +85,8 @@ namespace ItemStorageManager.ItemStorage
         {
             try
             {
-                ItemStorageManager.Functions.RegistryHive.Unload(keyName);
+                //ItemStorageManager.Functions.RegistryHive.Unload(keyName);
+                RegistryHelper.Unload(keyName);
             }
             catch { }
             return false;

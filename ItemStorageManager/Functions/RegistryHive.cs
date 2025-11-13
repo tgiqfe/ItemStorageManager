@@ -94,6 +94,7 @@ namespace ItemStorageManager.Functions
             return true;
         }
 
+        /*
         /// <summary>
         /// Load from registry hive file to specified key.
         /// </summary>
@@ -118,5 +119,6 @@ namespace ItemStorageManager.Functions
                 RegUnLoadKey(HKEY_USERS, keyName);
             }
         }
+        */
     }
 }

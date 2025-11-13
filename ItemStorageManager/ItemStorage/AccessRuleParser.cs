@@ -14,7 +14,7 @@ namespace ItemStorageManager.ItemStorage
         /// FileSystemRights mapping dictionary
         /// </summary>
         private static Dictionary<string[], FileSystemRights> _mapFileSystemRights = null;
-        private static void InitializeFileSystemRightsMap()
+        private static void InitializeFileSystemRights()
         {
             _mapFileSystemRights = new Dictionary<string[], FileSystemRights>
             {
@@ -45,7 +45,7 @@ namespace ItemStorageManager.ItemStorage
         }
         public static FileSystemRights StringToFileSystemRights(string text)
         {
-            if (_mapFileSystemRights == null) InitializeFileSystemRightsMap();
+            if (_mapFileSystemRights == null) InitializeFileSystemRights();
             foreach (var kvp in _mapFileSystemRights)
             {
                 if (kvp.Key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
@@ -57,7 +57,7 @@ namespace ItemStorageManager.ItemStorage
         }
         public static string FileSystemRightsToString(FileSystemRights val)
         {
-            if (_mapFileSystemRights == null) InitializeFileSystemRightsMap();
+            if (_mapFileSystemRights == null) InitializeFileSystemRights();
             foreach (var kvp in _mapFileSystemRights)
             {
                 if (kvp.Value == val)
@@ -75,7 +75,7 @@ namespace ItemStorageManager.ItemStorage
         /// RegistryRights mapping dictionary
         /// </summary>
         private static Dictionary<string[], RegistryRights> _mapRegistryRights = null;
-        private static void InitializeRegistryRightsMap()
+        private static void InitializeRegistryRights()
         {
             _mapRegistryRights = new Dictionary<string[], RegistryRights>
             {
@@ -97,10 +97,10 @@ namespace ItemStorageManager.ItemStorage
         }
         public static RegistryRights StringToRegistryRights(string text)
         {
-            if (_mapRegistryRights == null) InitializeRegistryRightsMap();
+            if (_mapRegistryRights == null) InitializeRegistryRights();
             foreach (var kvp in _mapRegistryRights)
             {
-                if (kvp.Key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
                 {
                     return kvp.Value;
                 }
@@ -109,7 +109,7 @@ namespace ItemStorageManager.ItemStorage
         }
         public static string RegistryRightsToString(RegistryRights val)
         {
-            if (_mapRegistryRights == null) InitializeRegistryRightsMap();
+            if (_mapRegistryRights == null) InitializeRegistryRights();
             foreach (var kvp in _mapRegistryRights)
             {
                 if (kvp.Value == val)
@@ -127,7 +127,7 @@ namespace ItemStorageManager.ItemStorage
         /// InheritanceFlags mapping dictionary
         /// </summary>
         private static Dictionary<string[], InheritanceFlags> _mapInheritanceFlags = null;
-        private static void InitializeInheritanceFlagsMap()
+        private static void InitializeInheritanceFlags()
         {
             _mapInheritanceFlags = new Dictionary<string[], InheritanceFlags>
             {
@@ -138,10 +138,10 @@ namespace ItemStorageManager.ItemStorage
         }
         public static InheritanceFlags StringToInheritanceFlags(string text)
         {
-            if (_mapInheritanceFlags == null) InitializeInheritanceFlagsMap();
+            if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
             foreach (var kvp in _mapInheritanceFlags)
             {
-                if (kvp.Key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
                 {
                     return kvp.Value;
                 }
@@ -150,7 +150,7 @@ namespace ItemStorageManager.ItemStorage
         }
         public static string InheritanceFlagsToString(InheritanceFlags val)
         {
-            if (_mapInheritanceFlags == null) InitializeInheritanceFlagsMap();
+            if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
             foreach (var kvp in _mapInheritanceFlags)
             {
                 if (kvp.Value == val)
@@ -182,7 +182,7 @@ namespace ItemStorageManager.ItemStorage
             if (_mapPropagationFlags == null) InitializePropagationFlagsMap();
             foreach (var kvp in _mapPropagationFlags)
             {
-                if (kvp.Key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
                 {
                     return kvp.Value;
                 }
@@ -209,7 +209,7 @@ namespace ItemStorageManager.ItemStorage
         /// AccessControlType mapping dictionary
         /// </summary>
         private static Dictionary<string[], AccessControlType> _mapAccessControlType = null;
-        private static void InitializeAccessControlTypeMap()
+        private static void InitializeAccessControlType()
         {
             _mapAccessControlType = new Dictionary<string[], AccessControlType>
             {
@@ -219,10 +219,10 @@ namespace ItemStorageManager.ItemStorage
         }
         public static AccessControlType StringToAccessControlType(string text)
         {
-            if (_mapAccessControlType == null) InitializeAccessControlTypeMap();
+            if (_mapAccessControlType == null) InitializeAccessControlType();
             foreach (var kvp in _mapAccessControlType)
             {
-                if (kvp.Key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
                 {
                     return kvp.Value;
                 }
@@ -231,7 +231,7 @@ namespace ItemStorageManager.ItemStorage
         }
         public static string AccessControlTypeToString(AccessControlType val)
         {
-            if (_mapAccessControlType == null) InitializeAccessControlTypeMap();
+            if (_mapAccessControlType == null) InitializeAccessControlType();
             foreach (var kvp in _mapAccessControlType)
             {
                 if (kvp.Value == val)

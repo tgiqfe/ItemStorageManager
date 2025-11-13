@@ -33,6 +33,8 @@ namespace ItemStorageManager.Functions
                 rootKey.OpenSubKey(keyPath, writable);
         }
 
+
+        /*
         /// <summary>
         /// Convert string to RegistryValueKind.
         /// </summary>
@@ -131,5 +133,6 @@ namespace ItemStorageManager.Functions
                 return new byte[0] { };
             }
         }
+        */
     }
 }
