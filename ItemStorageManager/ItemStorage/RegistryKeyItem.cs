@@ -11,7 +11,7 @@ namespace ItemStorageManager.ItemStorage
     {
         #region Public parameter 
 
-        public ItemType Type { get { return ItemType.RegistryKey; } }
+        public string Type { get { return "RegistryKey"; } }
         public string Path { get; set; }
         public string Name { get; set; }
         public AccessRuleSet AccessRule { get; set; }

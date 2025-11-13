@@ -9,12 +9,12 @@ namespace ItemStorageManager.ItemStorage
     {
         #region Public parameter
 
-        public ItemType Type { get { return ItemType.Directory; } }
+        public string Type { get { return "Directory"; } }
         public string Path { get; set; }
         public string Name { get; set; }
-        public DateTime CreationTime { get; set; }
-        public DateTime LastWriteTime { get; set; }
-        public DateTime LastAccessTime { get; set; }
+        public string CreationTime { get; set; }
+        public string LastWriteTime { get; set; }
+        public string LastAccessTime { get; set; }
         public string Attributes { get; set; }
         public AccessRuleSet AccessRule { get; set; }
 
@@ -28,9 +28,9 @@ namespace ItemStorageManager.ItemStorage
 
             this.Path = path;
             this.Name = System.IO.Path.GetFileName(path);
-            this.CreationTime = di.CreationTime;
-            this.LastWriteTime = di.LastWriteTime;
-            this.LastAccessTime = di.LastAccessTime;
+            this.CreationTime = di.CreationTime.ToString("yyyy/MM/dd HH:mm:ss");
+            this.LastWriteTime = di.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss");
+            this.LastAccessTime = di.LastAccessTime.ToString("yyyy/MM/dd HH:mm:ss");
             this.Attributes = di.Attributes.ToString();
             this.AccessRule = new AccessRuleSet(di.GetAccessControl());
         }

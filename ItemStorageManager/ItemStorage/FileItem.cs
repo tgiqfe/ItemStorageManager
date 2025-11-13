@@ -8,14 +8,14 @@ namespace ItemStorageManager.ItemStorage
     {
         #region Public parameter
 
-        public ItemType Type { get { return ItemType.File; } }
+        public string Type { get { return "File"; } }
         public string Path { get; set; }
         public string Name { get; set; }
         public string Size { get; set; }
         public string FormatedSize { get; set; }
-        public DateTime CreationTime { get; set; }
-        public DateTime LastWriteTime { get; set; }
-        public DateTime LastAccessTime { get; set; }
+        public string CreationTime { get; set; }
+        public string LastWriteTime { get; set; }
+        public string LastAccessTime { get; set; }
         public string Attributes { get; set; }
         public AccessRuleSet AccessRule { get; set; }
         public bool SecurityBlock { get; set; }
@@ -32,9 +32,9 @@ namespace ItemStorageManager.ItemStorage
             this.Name = System.IO.Path.GetFileName(path);
             this.Size = string.Format("{0:N0} Byte", fi.Length);
             this.FormatedSize = TextFunctions.FormatFileSize(fi.Length);
-            this.CreationTime = fi.CreationTime;
-            this.LastWriteTime = fi.LastWriteTime;
-            this.LastAccessTime = fi.LastAccessTime;
+            this.CreationTime = fi.CreationTime.ToString("yyyy/MM/dd HH:mm:ss");
+            this.LastWriteTime = fi.LastWriteTime.ToString("yyyy/MM/dd HH:mm:ss");
+            this.LastAccessTime = fi.LastAccessTime.ToString("yyyy/MM/dd HH:mm:ss");
             this.Attributes = fi.Attributes.ToString();
             this.AccessRule = new AccessRuleSet(fi.GetAccessControl());
             this.SecurityBlock = File.Exists($"{path}:Zone.Identifier");

@@ -2,7 +2,7 @@
 {
     internal interface IBaseItem
     {
-        ItemType Type { get; }
+        string Type { get; }
         string Path { get; set; }
         string Name { get; set; }
 
