@@ -78,10 +78,6 @@ namespace ItemStorageManager.ItemStorage
 
         public FileSystemAccessRule ToAccessRuleForFile()
         {
-            //return new FileSystemAccessRule(
-            //    new NTAccount(Account),
-            //    AccessRuleComponents.FileRightsMap<FileSystemRights>.StringToValue(this.Rights),
-            //    AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
             return new FileSystemAccessRule(
                 new NTAccount(Account),
                 AccessRuleParser.StringToFileSystemRights(this.Rights),
@@ -90,12 +86,6 @@ namespace ItemStorageManager.ItemStorage
 
         public FileSystemAccessRule ToAccessRuleForDirectory()
         {
-            //return new FileSystemAccessRule(
-            //    new NTAccount(Account),
-            //    AccessRuleComponents.FileRightsMap<FileSystemRights>.StringToValue(this.Rights),
-            //    AccessRuleComponents.InheritanceFlagsMap<InheritanceFlags>.StringToValue(this.Inheritance),
-            //    AccessRuleComponents.PropagationFlagsMap<PropagationFlags>.StringToValue(this.Propagation),
-            //    AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
             return new FileSystemAccessRule(
                 new NTAccount(Account),
                 AccessRuleParser.StringToFileSystemRights(this.Rights),
@@ -106,12 +96,6 @@ namespace ItemStorageManager.ItemStorage
 
         public RegistryAccessRule ToAccessRuleForRegistryKey()
         {
-            //return new RegistryAccessRule(
-            //    new NTAccount(Account),
-            //    AccessRuleComponents.RegistryRightsMap<RegistryRights>.StringToValue(this.Rights),
-            //    AccessRuleComponents.InheritanceFlagsMap<InheritanceFlags>.StringToValue(this.Inheritance),
-            //    AccessRuleComponents.PropagationFlagsMap<PropagationFlags>.StringToValue(this.Propagation),
-            //    AccessRuleComponents.AccessControlTypeMap<AccessControlType>.StringToValue(this.AccessType));
             return new RegistryAccessRule(
                 new NTAccount(Account),
                 AccessRuleParser.StringToRegistryRights(this.Rights),
