@@ -24,7 +24,7 @@ namespace ItemStorageManager.ItemStorage
         {
             this.Path = path;
             this.Name = System.IO.Path.GetFileName(path);
-            using (var regKey = RegistryHelper.GetRegistryKey(path))
+            using (var regKey = RegistryHelper.GetRegistryKey2(path))
             {
                 if (regKey != null)
                 {
@@ -41,7 +41,7 @@ namespace ItemStorageManager.ItemStorage
         public static bool New(string newPath)
         {
             Logger.WriteLine("Info", $"Creating new {_log_target}. '{newPath}'");
-            using (var regKey = RegistryHelper.GetRegistryKey(newPath, true, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(newPath, true, true))
             {
                 try
                 {
@@ -97,7 +97,7 @@ namespace ItemStorageManager.ItemStorage
         public static bool Exists(string path)
         {
             Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{path}'.");
-            using (var regKey = RegistryHelper.GetRegistryKey(path))
+            using (var regKey = RegistryHelper.GetRegistryKey2(path))
             {
                 try
                 {
@@ -124,8 +124,8 @@ namespace ItemStorageManager.ItemStorage
         public bool Copy(string dstPath, bool overwrite)
         {
             Logger.WriteLine("Info", $"Copying {_log_target}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
-            using (var srcKey = RegistryHelper.GetRegistryKey(this.Path))
-            using (var dstKey = RegistryHelper.GetRegistryKey(dstPath, true, true))
+            using (var srcKey = RegistryHelper.GetRegistryKey2(this.Path))
+            using (var dstKey = RegistryHelper.GetRegistryKey2(dstPath, true, true))
             {
                 try
                 {
@@ -204,7 +204,7 @@ namespace ItemStorageManager.ItemStorage
         public bool Remove()
         {
             Logger.WriteLine("Info", $"Removing {_log_target}. '{this.Path}'");
-            using (var regKey = RegistryHelper.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(System.IO.Path.GetDirectoryName(this.Path), true, false))
             {
                 try
                 {
@@ -236,8 +236,8 @@ namespace ItemStorageManager.ItemStorage
         public bool Move(string dstPath)
         {
             Logger.WriteLine("Info", $"Moving {_log_target}. From '{this.Path}' to '{dstPath}'.");
-            using (var srcKey = RegistryHelper.GetRegistryKey(this.Path))
-            using (var dstKey = RegistryHelper.GetRegistryKey(dstPath, true, true))
+            using (var srcKey = RegistryHelper.GetRegistryKey2(this.Path))
+            using (var dstKey = RegistryHelper.GetRegistryKey2(dstPath, true, true))
             {
                 try
                 {
@@ -250,7 +250,7 @@ namespace ItemStorageManager.ItemStorage
                     Logger.WriteRaw(e.ToString());
                 }
             }
-            using (var parentKey = RegistryHelper.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
+            using (var parentKey = RegistryHelper.GetRegistryKey2(System.IO.Path.GetDirectoryName(this.Path), true, false))
             {
                 try
                 {
@@ -274,8 +274,8 @@ namespace ItemStorageManager.ItemStorage
         {
             Logger.WriteLine("Info", $"Renaming {_log_target}. Key {this.Path}. From '{this.Name}' to '{newName}'.");
             string dstPath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(this.Path), newName);
-            using (var srcKey = RegistryHelper.GetRegistryKey(this.Path))
-            using (var dstKey = RegistryHelper.GetRegistryKey(dstPath, true, true))
+            using (var srcKey = RegistryHelper.GetRegistryKey2(this.Path))
+            using (var dstKey = RegistryHelper.GetRegistryKey2(dstPath, true, true))
             {
                 try
                 {
@@ -288,7 +288,7 @@ namespace ItemStorageManager.ItemStorage
                     Logger.WriteRaw(e.ToString());
                 }
             }
-            using (var parentKey = RegistryHelper.GetRegistryKey(System.IO.Path.GetDirectoryName(this.Path), false, true))
+            using (var parentKey = RegistryHelper.GetRegistryKey2(System.IO.Path.GetDirectoryName(this.Path), true, false))
             {
                 try
                 {
@@ -311,7 +311,7 @@ namespace ItemStorageManager.ItemStorage
         public bool Grant(string account, string rights, string accessType, string inheritance, string propagation)
         {
             Logger.WriteLine("Info", $"Granting access rule to {_log_target}. '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'");
-            using (var regKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(this.Path, true, false))
             {
                 try
                 {
@@ -337,7 +337,7 @@ namespace ItemStorageManager.ItemStorage
         public bool Grant(string accessRuleText)
         {
             Logger.WriteLine("Info", $"Granting access rule to {_log_target}. '{this.Path}': AccessRule='{accessRuleText}'");
-            using (var regKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(this.Path, true, false))
             {
                 try
                 {
@@ -363,7 +363,7 @@ namespace ItemStorageManager.ItemStorage
         public bool Revoke(string account)
         {
             Logger.WriteLine("Info", $"Revoking access rules from {_log_target}. '{this.Path}': Account='{account}'");
-            using (var regKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(this.Path, true,false))
             {
                 try
                 {
@@ -395,7 +395,7 @@ namespace ItemStorageManager.ItemStorage
 
         public bool RevokeAll()
         {
-            using (var regKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(this.Path, true, false))
             {
                 Logger.WriteLine("Info", $"Revoking all access rules from {_log_target}. '{this.Path}'");
                 try
@@ -437,7 +437,7 @@ namespace ItemStorageManager.ItemStorage
             }
             Logger.WriteLine("Info", $"Changing owner of {_log_target}. '{this.Path}' to '{newOwner}'");
             
-            using (var regKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(this.Path, true, false))
             {
                 try
                 {
@@ -479,7 +479,7 @@ namespace ItemStorageManager.ItemStorage
             }
             Logger.WriteLine("Info", $"Changing inheritance of {_log_target}. '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
             
-            using (var regKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(this.Path, true, false))
             {
                 try
                 {

@@ -23,7 +23,7 @@ namespace ItemStorageManager.ItemStorage
         {
             this.Path = $"{keyPath}\\{valueName}";
             this.Name = valueName;
-            using (var regKey = RegistryHelper.GetRegistryKey(keyPath))
+            using (var regKey = RegistryHelper.GetRegistryKey2(keyPath))
             {
                 if (regKey != null)
                 {
@@ -39,7 +39,7 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool Set(string keyPath, string name, object data, string valueKindString)
         {
-            using (var regKey = RegistryHelper.GetRegistryKey(keyPath, true, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(keyPath, true, true))
             {
                 try
                 {
@@ -53,7 +53,7 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool Set(string keyPath, string name, object data, RegistryValueKind valueKind)
         {
-            using (var regKey = RegistryHelper.GetRegistryKey(keyPath, true, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(keyPath, true, true))
             {
                 try
                 {
@@ -67,7 +67,7 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool Set(string keyPath, string name, string dataString, RegistryValueKind valueKind)
         {
-            using (var regKey = RegistryHelper.GetRegistryKey(keyPath, true, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(keyPath, true, true))
             {
                 try
                 {
@@ -82,7 +82,7 @@ namespace ItemStorageManager.ItemStorage
 
         public static bool Set(string keyPath, string name, string dataString, string valueKindString)
         {
-            using (var regKey = RegistryHelper.GetRegistryKey(keyPath, true, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(keyPath, true, true))
             {
                 try
                 {
@@ -103,7 +103,7 @@ namespace ItemStorageManager.ItemStorage
         public static bool Exists(string path, string name)
         {
             Logger.WriteLine("Info", $"Checking existence of {_log_target} at path '{path}', value '{name}'.");
-            using (var regKey = RegistryHelper.GetRegistryKey(path))
+            using (var regKey = RegistryHelper.GetRegistryKey2(path))
             {
                 try
                 {
@@ -131,8 +131,8 @@ namespace ItemStorageManager.ItemStorage
         public bool Copy(string dstPath, bool overwrite)
         {
             Logger.WriteLine("Info", $"Copying {_log_target}. From '{this.Path}' to '{dstPath}', overwrite: {overwrite}.");
-            using (var srcKey = RegistryHelper.GetRegistryKey(this.Path))
-            using (var dstKey = RegistryHelper.GetRegistryKey(dstPath, true, true))
+            using (var srcKey = RegistryHelper.GetRegistryKey2(this.Path))
+            using (var dstKey = RegistryHelper.GetRegistryKey2(dstPath, true, true))
             {
                 try
                 {
@@ -163,8 +163,8 @@ namespace ItemStorageManager.ItemStorage
         public bool Copy(string dstPath, string dstName, bool overwrite)
         {
             Logger.WriteLine("Info", $"Copying {_log_target}. From '{this.Path}' '{this.Name}' to '{dstPath}' '{dstName}', overwrite: {overwrite}.");
-            using (var srcKey = RegistryHelper.GetRegistryKey(this.Path))
-            using (var dstKey = RegistryHelper.GetRegistryKey(dstPath, true, true))
+            using (var srcKey = RegistryHelper.GetRegistryKey2(this.Path))
+            using (var dstKey = RegistryHelper.GetRegistryKey2(dstPath, true, true))
             {
                 try
                 {
@@ -192,7 +192,7 @@ namespace ItemStorageManager.ItemStorage
         public bool Remove()
         {
             Logger.WriteLine("Info", $"Removing {_log_target}. '{this.Path}'");
-            using (var regKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(this.Path, true, false))
             {
                 try
                 {
@@ -224,8 +224,8 @@ namespace ItemStorageManager.ItemStorage
         public bool Move(string dstPath)
         {
             Logger.WriteLine("Info", $"Moving {_log_target}. value '{this.Name}'. From '{this.Path}' to '{dstPath}'.");
-            using (var srcKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
-            using (var dstKey = RegistryHelper.GetRegistryKey(dstPath, true, true))
+            using (var srcKey = RegistryHelper.GetRegistryKey2(this.Path, true, false))
+            using (var dstKey = RegistryHelper.GetRegistryKey2(dstPath, true, true))
             {
                 try
                 {
@@ -248,7 +248,7 @@ namespace ItemStorageManager.ItemStorage
         public bool Rename(string newName)
         {
             Logger.WriteLine("Info", $"Renaming {_log_target}. Key {this.Path}. From '{this.Name}' to '{newName}'.");
-            using (var regKey = RegistryHelper.GetRegistryKey(this.Path, false, true))
+            using (var regKey = RegistryHelper.GetRegistryKey2(this.Path, true, false))
             {
                 try
                 {

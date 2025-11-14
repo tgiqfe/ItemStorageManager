@@ -20,6 +20,7 @@ namespace ItemStorageManager.Functions
 
         #endregion
 
+        /*
         public static RegistryKey GetRegistryKey(string path, bool isCreate = false, bool writable = false)
         {
             string rootPath = path.Substring(0, path.IndexOf("\\"));
@@ -40,6 +41,7 @@ namespace ItemStorageManager.Functions
                 rootKey.CreateSubKey(keyPath, writable) :
                 rootKey.OpenSubKey(keyPath, writable);
         }
+        */
 
         /// <summary>
         /// writableとcreateを逆に。最終的にはこちらを採用する予定。
