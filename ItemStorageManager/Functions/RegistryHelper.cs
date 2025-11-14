@@ -20,29 +20,6 @@ namespace ItemStorageManager.Functions
 
         #endregion
 
-        /*
-        public static RegistryKey GetRegistryKey(string path, bool isCreate = false, bool writable = false)
-        {
-            string rootPath = path.Substring(0, path.IndexOf("\\"));
-            string keyPath = path.Substring(path.IndexOf("\\") + 1);
-
-            RegistryKey rootKey = rootPath.ToLower() switch
-            {
-                "hkcr" or "hkcr:" or "hkey_classes_root" => Registry.ClassesRoot,
-                "hkcu" or "hkcu:" or "hkey_current_user" => Registry.CurrentUser,
-                "hklm" or "hklm:" or "hkey_local_machine" => Registry.LocalMachine,
-                "hku" or "hku:" or "hkey_users" => Registry.Users,
-                "hkcc" or "hkcc:" or "hkey_current_config" => Registry.CurrentConfig,
-                _ => null
-            };
-            if (rootKey == null) return null;
-
-            return isCreate ?
-                rootKey.CreateSubKey(keyPath, writable) :
-                rootKey.OpenSubKey(keyPath, writable);
-        }
-        */
-
         /// <summary>
         /// writableとcreateを逆に。最終的にはこちらを採用する予定。
         /// </summary>
@@ -50,7 +27,7 @@ namespace ItemStorageManager.Functions
         /// <param name="writable"></param>
         /// <param name="isCreate"></param>
         /// <returns></returns>
-        public static RegistryKey GetRegistryKey2(string path, bool writable = false, bool isCreate = false)
+        public static RegistryKey GetRegistryKey(string path, bool writable = false, bool isCreate = false)
         {
             string rootPath = path.Substring(0, path.IndexOf("\\"));
             string keyPath = path.Substring(path.IndexOf("\\") + 1);
