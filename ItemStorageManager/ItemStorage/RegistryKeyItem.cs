@@ -7,7 +7,7 @@ using System.Security.Principal;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class RegistryKeyItem : IBaseItem
+    public class RegistryKeyItem : IBaseItem
     {
         #region Public parameter 
 

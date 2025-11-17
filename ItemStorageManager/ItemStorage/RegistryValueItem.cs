@@ -3,7 +3,7 @@ using Microsoft.Win32;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class RegistryValueItem : IBaseItem
+    public class RegistryValueItem : IBaseItem
     {
         #region Public parameter
 

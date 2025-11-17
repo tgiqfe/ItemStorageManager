@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ItemStorageManager.Functions
 {
-    internal class RegistryHelper
+    public class RegistryHelper
     {
         #region load/unload hive Registry parameters
 

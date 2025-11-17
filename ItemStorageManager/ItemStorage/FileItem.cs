@@ -4,7 +4,7 @@ using System.Security.Principal;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class FileItem : IBaseItem
+    public class FileItem : IBaseItem
     {
         #region Public parameter
 

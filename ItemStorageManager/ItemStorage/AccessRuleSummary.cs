@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class AccessRuleSummary
+    public class AccessRuleSummary
     {
         [JsonIgnore]
         public string Account { get; private set; }

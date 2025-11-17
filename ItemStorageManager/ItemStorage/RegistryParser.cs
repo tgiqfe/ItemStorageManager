@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class RegistryParser
+    public class RegistryParser
     {
         #region RegistryValueKind mapping.
 

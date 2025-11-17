@@ -2,7 +2,7 @@
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class Logger
+    public class Logger
     {
         /// <summary>
         /// Log file name without extension.

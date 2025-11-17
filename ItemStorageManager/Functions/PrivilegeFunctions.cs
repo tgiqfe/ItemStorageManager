@@ -4,7 +4,7 @@ using System.Security.Principal;
 
 namespace ItemStorageManager.Functions
 {
-    internal class ProcessPrivilege
+    public class ProcessPrivilege
     {
         [StructLayout(LayoutKind.Sequential)]
         public struct LUID
@@ -103,7 +103,7 @@ namespace ItemStorageManager.Functions
 
     //  参考
     //  https://learn.microsoft.com/ja-jp/windows/win32/secauthz/privilege-constants
-    internal class Privilege
+    public class Privilege
     {
         public const string SeCreateTokenPrivilege = "SeCreateTokenPrivilege";
         public const string SeAssignPrimaryTokenPrivilege = "SeAssignPrimaryTokenPrivilege";

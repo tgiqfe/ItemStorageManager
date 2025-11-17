@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ItemStorageManager.Functions
 {
-    internal class ___Class
+    public class ___Class
     {
     }
 }

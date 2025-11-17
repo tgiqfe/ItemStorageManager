@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class AccessRuleSet
+    public class AccessRuleSet
     {
         public string Owner { get; set; }
         public bool IsInherited { get; set; }

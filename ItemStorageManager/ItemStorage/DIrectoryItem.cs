@@ -5,7 +5,7 @@ using System.Security.Principal;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class DirectoryItem : IBaseItem
+    public class DirectoryItem : IBaseItem
     {
         #region Public parameter
 
@@ -227,6 +227,8 @@ namespace ItemStorageManager.ItemStorage
             Logger.WriteLine("Info", $"Granting access rule to {_log_target}. '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'");
             try
             {
+                
+
                 var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForDirectory();
                 var di = new DirectoryInfo(this.Path);
                 var acl = di.GetAccessControl();

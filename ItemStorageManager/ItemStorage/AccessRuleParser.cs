@@ -6,7 +6,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace ItemStorageManager.ItemStorage
 {
-    internal class AccessRuleParser
+    public class AccessRuleParser
     {
         #region FileSystemRights mapping
 
@@ -67,6 +67,18 @@ namespace ItemStorageManager.ItemStorage
             }
             return "Unknown";
         }
+        public static string GetFileSystemRightsString(string text)
+        {
+            if (_mapFileSystemRights == null) InitializeFileSystemRights();
+            foreach(var key in _mapFileSystemRights.Keys)
+            {
+                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return key[0];
+                }
+            }
+            throw new ArgumentException($"Invalid file system rights string: {text}");
+        }
 
         #endregion
         #region RegistryRights mapping
@@ -119,6 +131,18 @@ namespace ItemStorageManager.ItemStorage
             }
             return "Unknown";
         }
+        public static string GetRegistryRightsString(string text)
+        {
+            if (_mapRegistryRights == null) InitializeRegistryRights();
+            foreach (var key in _mapRegistryRights.Keys)
+            {
+                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return key[0];
+                }
+            }
+            throw new ArgumentException($"Invalid registry rights string: {text}");
+        }
 
         #endregion
         #region InheritanceFlags mapping
@@ -159,6 +183,18 @@ namespace ItemStorageManager.ItemStorage
                 }
             }
             return "Unknown";
+        }
+        public static string GetInheritanceFlagsString(string text)
+        {
+            if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
+            foreach (var key in _mapInheritanceFlags.Keys)
+            {
+                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return key[0];
+                }
+            }
+            throw new ArgumentException($"Invalid inheritance flags string: {text}");
         }
 
         #endregion
@@ -201,6 +237,18 @@ namespace ItemStorageManager.ItemStorage
             }
             return "Unknown";
         }
+        public static string GetPropagationFlagsString(string text)
+        {
+            if (_mapPropagationFlags == null) InitializePropagationFlagsMap();
+            foreach (var key in _mapPropagationFlags.Keys)
+            {
+                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return key[0];
+                }
+            }
+            throw new ArgumentException($"Invalid propagation flags string: {text}");
+        }
 
         #endregion
         #region AccessControlType mapping
@@ -240,6 +288,18 @@ namespace ItemStorageManager.ItemStorage
                 }
             }
             return "Unknown";
+        }
+        public static string GetAccessControlTypeString(string text)
+        {
+            if (_mapAccessControlType == null) InitializeAccessControlType();
+            foreach (var key in _mapAccessControlType.Keys)
+            {
+                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                {
+                    return key[0];
+                }
+            }
+            throw new ArgumentException($"Invalid access control type string: {text}");
         }
 
         #endregion

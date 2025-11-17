@@ -1,6 +1,6 @@
 ﻿namespace ItemStorageManager.ItemStorage
 {
-    internal class AttributeMapping
+    public class AttributeMapping
     {
         private static Dictionary<string, FileAttributes> _attributeMap = null;
 
