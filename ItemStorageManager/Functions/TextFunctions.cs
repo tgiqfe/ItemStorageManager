@@ -57,7 +57,7 @@ namespace ItemStorageManager.Functions
                         break;
                     }
                 }
-                if (found) throw new ArgumentException($"The text '{text}' does not correspond to any value of the enum '{typeof(T).Name}'.");
+                if (!found) throw new ArgumentException($"The text '{text}' does not correspond to any value of the enum '{typeof(T).Name}'.");
             }
             return flags;
         }
