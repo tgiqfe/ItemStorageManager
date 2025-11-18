@@ -223,7 +223,7 @@ namespace ItemStorageManager.ItemStorage
             Logger.WriteLine("Info", $"Granting access rule to {_log_target}. '{this.Path}': Account='{account}', Rights='{rights}', AccessType='{accessType}', Inheritance='{inheritance}', Propagation='{propagation}'");
             try
             {
-                var newRule = new AccessRuleSummary(account, rights, accessType, inheritance, propagation).ToAccessRuleForFile();
+                var newRule = new AccessRuleSummary(account, rights, accessType, null, null).ToAccessRuleForFile();
                 var fi = new FileInfo(this.Path);
                 var acl = fi.GetAccessControl();
                 acl.AddAccessRule(newRule);

@@ -16,7 +16,7 @@ namespace ItemStorageManager.ItemStorage
         private static Dictionary<string[], FileSystemRights> _mapFileSystemRights = null;
         private static void InitializeFileSystemRights()
         {
-            _mapFileSystemRights = new Dictionary<string[], FileSystemRights>
+            _mapFileSystemRights = new()
             {
                 { new string[]{ "AppendData" }, FileSystemRights.AppendData },
                 { new string[]{ "ChangePermissions" }, FileSystemRights.ChangePermissions },
@@ -70,7 +70,7 @@ namespace ItemStorageManager.ItemStorage
         public static string GetFileSystemRightsString(string text)
         {
             if (_mapFileSystemRights == null) InitializeFileSystemRights();
-            foreach(var key in _mapFileSystemRights.Keys)
+            foreach (var key in _mapFileSystemRights.Keys)
             {
                 if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
                 {
@@ -89,7 +89,7 @@ namespace ItemStorageManager.ItemStorage
         private static Dictionary<string[], RegistryRights> _mapRegistryRights = null;
         private static void InitializeRegistryRights()
         {
-            _mapRegistryRights = new Dictionary<string[], RegistryRights>
+            _mapRegistryRights = new()
             {
                 { new string[] { "QueryValues" }, RegistryRights.QueryValues },
                 { new string[] { "SetValue", "Set" }, RegistryRights.SetValue },
@@ -153,7 +153,7 @@ namespace ItemStorageManager.ItemStorage
         private static Dictionary<string[], InheritanceFlags> _mapInheritanceFlags = null;
         private static void InitializeInheritanceFlags()
         {
-            _mapInheritanceFlags = new Dictionary<string[], InheritanceFlags>
+            _mapInheritanceFlags = new()
             {
                 { new string[] { "ContainerInherit", "Container", "CI" }, InheritanceFlags.ContainerInherit },
                 { new string[] { "None", "No" }, InheritanceFlags.None },
@@ -206,7 +206,7 @@ namespace ItemStorageManager.ItemStorage
         private static Dictionary<string[], PropagationFlags> _mapPropagationFlags = null;
         private static void InitializePropagationFlagsMap()
         {
-            _mapPropagationFlags = new Dictionary<string[], PropagationFlags>
+            _mapPropagationFlags = new()
             {
                 { new string[] { "None", "No" }, PropagationFlags.None },
                 { new string[] { "NoPropagateInherit", "NoPropagate", "NPI" }, PropagationFlags.NoPropagateInherit },
@@ -259,7 +259,7 @@ namespace ItemStorageManager.ItemStorage
         private static Dictionary<string[], AccessControlType> _mapAccessControlType = null;
         private static void InitializeAccessControlType()
         {
-            _mapAccessControlType = new Dictionary<string[], AccessControlType>
+            _mapAccessControlType = new()
             {
                 { new string[] { "Allow", "A" }, AccessControlType.Allow },
                 { new string[] { "Deny", "Block", "D" }, AccessControlType.Deny },
