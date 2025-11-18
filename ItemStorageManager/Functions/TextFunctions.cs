@@ -63,6 +63,34 @@ namespace ItemStorageManager.Functions
         }
 
         /// <summary>
+        /// String -> Number
+        /// if multiple parts, sum them up.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static int StringToFlags(string text, Dictionary<string[], int> map)
+        {
+            int number = 0;
+            foreach (var part in text.Split(',').Select(x => x.Trim()))
+            {
+                bool found = false;
+                foreach (var kvp in map)
+                {
+                    if (kvp.Key.Any(x => string.Equals(x, part, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        number += kvp.Value;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) throw new ArgumentException($"The text '{text}' does not correspond to any known value.");
+            }
+            return number;
+        }
+
+        /// <summary>
         /// Enum -> String
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -83,7 +111,26 @@ namespace ItemStorageManager.Functions
         }
 
         /// <summary>
+        /// Number -> String
+        /// </summary>
+        /// <param name="number"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        public static string FlagsToString(int number, Dictionary<string[], int> map)
+        {
+            foreach (var kvp in map)
+            {
+                if (number == kvp.Value)
+                {
+                    return kvp.Key[0];
+                }
+            }
+            return number.ToString();
+        }
+
+        /// <summary>
         /// String -> Corrected String
+        /// (string[], T) map to get the correct casing
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="text"></param>
@@ -106,6 +153,34 @@ namespace ItemStorageManager.Functions
                     }
                 }
                 if (!found) throw new ArgumentException($"The text '{text}' does not correspond to any value of the enum '{typeof(T).Name}'.");
+            }
+            return parts.Count > 0 ? string.Join(", ", parts) : "Unknown";
+        }
+
+        /// <summary>
+        /// String -> Corrected String
+        /// (string[], int) map to get the correct casing
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="map"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static string GetCorrect(string text, Dictionary<string[], int> map)
+        {
+            var parts = new List<string>();
+            foreach (var part in text.Split(',').Select(x => x.Trim()))
+            {
+                bool found = false;
+                foreach (var key in map.Keys)
+                {
+                    if (key.Any(x => string.Equals(x, part, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        parts.Add(key[0]);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) throw new ArgumentException($"The text '{text}' does not correspond to any known value.");
             }
             return parts.Count > 0 ? string.Join(", ", parts) : "Unknown";
         }
