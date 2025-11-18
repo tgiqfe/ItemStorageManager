@@ -25,32 +25,17 @@ namespace ItemStorageManager.ItemStorage
         public static RegistryValueKind StringToRegistryValueKind(string text)
         {
             if (_mapRegistryValueKind == null) InitializeRegistryValueKind();
-            /*
-            foreach (var kvp in _mapRegistryValueKind)
-            {
-                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return kvp.Value;
-                }
-            }
-            throw new ArgumentException($"Invalid RegistryValueKind string: {text}");
-            */
             return TextFunctions.StringToFlags<RegistryValueKind>(text, _mapRegistryValueKind);
         }
         public static string RegistryValueKindToString(RegistryValueKind valueKind)
         {
             if (_mapRegistryValueKind == null) InitializeRegistryValueKind();
-            /*
-            foreach (var kvp in _mapRegistryValueKind)
-            {
-                if (kvp.Value == valueKind)
-                {
-                    return kvp.Key[0];
-                }
-            }
-            return "Unknown";
-            */
             return TextFunctions.FlagsToString<RegistryValueKind>(valueKind, _mapRegistryValueKind);
+        }
+        public static string GetRegistryValueKindString(string text)
+        {
+            if (_mapRegistryValueKind == null) InitializeRegistryValueKind();
+            return TextFunctions.GetCorrect<RegistryValueKind>(text, _mapRegistryValueKind);
         }
 
         #endregion

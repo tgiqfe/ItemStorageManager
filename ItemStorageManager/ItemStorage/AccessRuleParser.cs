@@ -47,46 +47,16 @@ namespace ItemStorageManager.ItemStorage
         public static FileSystemRights StringToFileSystemRights(string text)
         {
             if (_mapFileSystemRights == null) InitializeFileSystemRights();
-            /*
-            foreach (var kvp in _mapFileSystemRights)
-            {
-                if (kvp.Key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return kvp.Value;
-                }
-            }
-            throw new ArgumentException($"Invalid file rights string: {text}");
-            */
             return TextFunctions.StringToFlags<FileSystemRights>(text, _mapFileSystemRights);
         }
         public static string FileSystemRightsToString(FileSystemRights val)
         {
             if (_mapFileSystemRights == null) InitializeFileSystemRights();
-            /*
-            foreach (var kvp in _mapFileSystemRights)
-            {
-                if (kvp.Value == val)
-                {
-                    return kvp.Key[0];
-                }
-            }
-            return "Unknown";
-            */
             return TextFunctions.FlagsToString<FileSystemRights>(val, _mapFileSystemRights);
         }
         public static string GetFileSystemRightsString(string text)
         {
             if (_mapFileSystemRights == null) InitializeFileSystemRights();
-            /*
-            foreach (var key in _mapFileSystemRights.Keys)
-            {
-                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return key[0];
-                }
-            }
-            throw new ArgumentException($"Invalid file system rights string: {text}");
-            */
             return TextFunctions.GetCorrect<FileSystemRights>(text, _mapFileSystemRights);
         }
 
@@ -120,46 +90,16 @@ namespace ItemStorageManager.ItemStorage
         public static RegistryRights StringToRegistryRights(string text)
         {
             if (_mapRegistryRights == null) InitializeRegistryRights();
-            /*
-            foreach (var kvp in _mapRegistryRights)
-            {
-                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return kvp.Value;
-                }
-            }
-            throw new ArgumentException($"Invalid registry rights string: {text}");
-            */
             return TextFunctions.StringToFlags<RegistryRights>(text, _mapRegistryRights);
         }
         public static string RegistryRightsToString(RegistryRights val)
         {
             if (_mapRegistryRights == null) InitializeRegistryRights();
-            /*
-            foreach (var kvp in _mapRegistryRights)
-            {
-                if (kvp.Value == val)
-                {
-                    return kvp.Key[0];
-                }
-            }
-            return "Unknown";
-            */
             return TextFunctions.FlagsToString<RegistryRights>(val, _mapRegistryRights);
         }
         public static string GetRegistryRightsString(string text)
         {
             if (_mapRegistryRights == null) InitializeRegistryRights();
-            /*
-            foreach (var key in _mapRegistryRights.Keys)
-            {
-                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return key[0];
-                }
-            }
-            throw new ArgumentException($"Invalid registry rights string: {text}");
-            */
             return TextFunctions.GetCorrect<RegistryRights>(text, _mapRegistryRights);
         }
 
@@ -182,85 +122,16 @@ namespace ItemStorageManager.ItemStorage
         public static InheritanceFlags StringToInheritanceFlags(string text)
         {
             if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
-            /*
-            if (text.Contains(","))
-            {
-                var flags = default(InheritanceFlags);
-                foreach (var part in text.Split(',').Select(x => x.Trim()))
-                {
-                    bool isFound = false;
-                    foreach (var kvp in _mapInheritanceFlags)
-                    {
-                        if (kvp.Key.Any(x => x.Equals(part, StringComparison.OrdinalIgnoreCase)))
-                        {
-                            flags |= kvp.Value;
-                            isFound = true;
-                            break;
-                        }
-                    }
-                    if (!isFound) throw new ArgumentException($"Invalid inheritance flags string: {text}");
-                }
-                return flags;
-            }
-            else
-            {
-                foreach (var kvp in _mapInheritanceFlags)
-                {
-                    if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        return kvp.Value;
-                    }
-                }
-            }
-            throw new ArgumentException($"Invalid inheritance flags string: {text}");
-            */
             return TextFunctions.StringToFlags<InheritanceFlags>(text, _mapInheritanceFlags);
         }
         public static string InheritanceFlagsToString(InheritanceFlags val)
         {
             if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
-            /*
-            StringBuilder sb = new();
-            foreach (var kvp in _mapInheritanceFlags)
-            {
-                if (val.HasFlag(kvp.Value))
-                {
-                    if (sb.Length > 0)
-                    {
-                        sb.Append(", ");
-                    }
-                    sb.Append(kvp.Key[0]);
-                }
-            }
-            return sb.Length > 0 ? sb.ToString() : "Unknown";
-            */
             return TextFunctions.FlagsToString<InheritanceFlags>(val, _mapInheritanceFlags);
         }
         public static string GetInheritanceFlagsString(string text)
         {
             if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
-            /*
-            StringBuilder sb = new();
-            foreach(var part in text.Split(',').Select(x => x.Trim()))
-            {
-                bool isFound = false;
-                foreach (var key in _mapInheritanceFlags.Keys)
-                {
-                    if (key.Any(x => string.Equals(x, part, StringComparison.OrdinalIgnoreCase)))
-                    {
-                        if (sb.Length > 0)
-                        {
-                            sb.Append(", ");
-                        }
-                        sb.Append(key[0]);
-                        isFound = true;
-                        break;
-                    }
-                }
-                if (!isFound) throw new ArgumentException($"Invalid inheritance flags string: {text}");
-            }
-            return sb.Length > 0 ? sb.ToString() : "Unknown";
-            */
             return TextFunctions.GetCorrect<InheritanceFlags>(text, _mapInheritanceFlags);
         }
 
@@ -283,46 +154,16 @@ namespace ItemStorageManager.ItemStorage
         public static PropagationFlags StringToPropagationFlags(string text)
         {
             if (_mapPropagationFlags == null) InitializePropagationFlagsMap();
-            /*
-            foreach (var kvp in _mapPropagationFlags)
-            {
-                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return kvp.Value;
-                }
-            }
-            throw new ArgumentException($"Invalid propagation flags string: {text}");
-            */
             return TextFunctions.StringToFlags<PropagationFlags>(text, _mapPropagationFlags);
         }
         public static string PropagationFlagsToString(PropagationFlags val)
         {
             if (_mapPropagationFlags == null) InitializePropagationFlagsMap();
-            /*
-            foreach (var kvp in _mapPropagationFlags)
-            {
-                if (kvp.Value == val)
-                {
-                    return kvp.Key[0];
-                }
-            }
-            return "Unknown";
-            */
             return TextFunctions.FlagsToString<PropagationFlags>(val, _mapPropagationFlags);
         }
         public static string GetPropagationFlagsString(string text)
         {
             if (_mapPropagationFlags == null) InitializePropagationFlagsMap();
-            /*
-            foreach (var key in _mapPropagationFlags.Keys)
-            {
-                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return key[0];
-                }
-            }
-            throw new ArgumentException($"Invalid propagation flags string: {text}");
-            */
             return TextFunctions.GetCorrect<PropagationFlags>(text, _mapPropagationFlags);
         }
 
@@ -344,46 +185,16 @@ namespace ItemStorageManager.ItemStorage
         public static AccessControlType StringToAccessControlType(string text)
         {
             if (_mapAccessControlType == null) InitializeAccessControlType();
-            /*
-            foreach (var kvp in _mapAccessControlType)
-            {
-                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return kvp.Value;
-                }
-            }
-            throw new ArgumentException($"Invalid access control type string: {text}");
-            */
             return TextFunctions.StringToFlags<AccessControlType>(text, _mapAccessControlType);
         }
         public static string AccessControlTypeToString(AccessControlType val)
         {
             if (_mapAccessControlType == null) InitializeAccessControlType();
-            /*
-            foreach (var kvp in _mapAccessControlType)
-            {
-                if (kvp.Value == val)
-                {
-                    return kvp.Key[0];
-                }
-            }
-            return "Unknown";
-            */
             return TextFunctions.FlagsToString<AccessControlType>(val, _mapAccessControlType);
         }
         public static string GetAccessControlTypeString(string text)
         {
             if (_mapAccessControlType == null) InitializeAccessControlType();
-            /*
-            foreach (var key in _mapAccessControlType.Keys)
-            {
-                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
-                {
-                    return key[0];
-                }
-            }
-            throw new ArgumentException($"Invalid access control type string: {text}");
-            */
             return TextFunctions.GetCorrect<AccessControlType>(text, _mapAccessControlType);
         }
 
