@@ -155,19 +155,41 @@ namespace ItemStorageManager.ItemStorage
         {
             _mapInheritanceFlags = new()
             {
-                { new string[] { "ContainerInherit", "Container", "CI" }, InheritanceFlags.ContainerInherit },
+                { new string[] { "ContainerInherit", "Container Inherit", "ContainerInheritance", "Container Inheritance", "Container", "CI", "(CI)" }, InheritanceFlags.ContainerInherit },
                 { new string[] { "None", "No" }, InheritanceFlags.None },
-                { new string[] { "ObjectInherit", "Object", "OI" }, InheritanceFlags.ObjectInherit },
+                { new string[] { "ObjectInherit", "Object inherit", "ObjectInheritance", "Object Inheritance", "Object", "OI", "(OI)" }, InheritanceFlags.ObjectInherit },
             };
         }
         public static InheritanceFlags StringToInheritanceFlags(string text)
         {
             if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
-            foreach (var kvp in _mapInheritanceFlags)
+            if (text.Contains(","))
             {
-                if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
+                var flags = default(InheritanceFlags);
+                foreach (var part in text.Split(',').Select(x => x.Trim()))
                 {
-                    return kvp.Value;
+                    bool isFound = false;
+                    foreach (var kvp in _mapInheritanceFlags)
+                    {
+                        if (kvp.Key.Any(x => x.Equals(part, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            flags |= kvp.Value;
+                            isFound = true;
+                            break;
+                        }
+                    }
+                    if (!isFound) throw new ArgumentException($"Invalid inheritance flags string: {text}");
+                }
+                return flags;
+            }
+            else
+            {
+                foreach (var kvp in _mapInheritanceFlags)
+                {
+                    if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        return kvp.Value;
+                    }
                 }
             }
             throw new ArgumentException($"Invalid inheritance flags string: {text}");
@@ -175,26 +197,43 @@ namespace ItemStorageManager.ItemStorage
         public static string InheritanceFlagsToString(InheritanceFlags val)
         {
             if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
+            StringBuilder sb = new();
             foreach (var kvp in _mapInheritanceFlags)
             {
-                if (kvp.Value == val)
+                if (val.HasFlag(kvp.Value))
                 {
-                    return kvp.Key[0];
+                    if (sb.Length > 0)
+                    {
+                        sb.Append(", ");
+                    }
+                    sb.Append(kvp.Key[0]);
                 }
             }
-            return "Unknown";
+            return sb.Length > 0 ? sb.ToString() : "Unknown";
         }
         public static string GetInheritanceFlagsString(string text)
         {
             if (_mapInheritanceFlags == null) InitializeInheritanceFlags();
-            foreach (var key in _mapInheritanceFlags.Keys)
+            StringBuilder sb = new();
+            foreach(var part in text.Split(',').Select(x => x.Trim()))
             {
-                if (key.Any(x => string.Equals(x, text, StringComparison.OrdinalIgnoreCase)))
+                bool isFound = false;
+                foreach (var key in _mapInheritanceFlags.Keys)
                 {
-                    return key[0];
+                    if (key.Any(x => string.Equals(x, part, StringComparison.OrdinalIgnoreCase)))
+                    {
+                        if (sb.Length > 0)
+                        {
+                            sb.Append(", ");
+                        }
+                        sb.Append(key[0]);
+                        isFound = true;
+                        break;
+                    }
                 }
+                if (!isFound) throw new ArgumentException($"Invalid inheritance flags string: {text}");
             }
-            throw new ArgumentException($"Invalid inheritance flags string: {text}");
+            return sb.Length > 0 ? sb.ToString() : "Unknown";
         }
 
         #endregion

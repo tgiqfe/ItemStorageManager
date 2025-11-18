@@ -33,31 +33,31 @@ namespace ItemStorageManager.ItemStorage
         public static FileAttributes StringToAttributes(string text)
         {
             if (_attributesMap == null) InitializeAttributes();
-            var attr = default(FileAttributes);
-            foreach (var attrText in text.Split(',').Select(x => x.Trim()))
+            var flags = default(FileAttributes);
+            foreach (var part in text.Split(',').Select(x => x.Trim()))
             {
                 bool isFound = false;
                 foreach (var kvp in _attributesMap)
                 {
-                    if (kvp.Key.Any(x => string.Equals(x, attrText, StringComparison.OrdinalIgnoreCase)))
+                    if (kvp.Key.Any(x => string.Equals(x, part, StringComparison.OrdinalIgnoreCase)))
                     {
-                        attr |= kvp.Value;
+                        flags |= kvp.Value;
                         isFound = true;
                         break;
                     }
                 }
                 if (!isFound) throw new ArgumentException($"Invalid attributes string: {text}");
             }
-            return attr;
+            return flags;
         }
 
-        public static string AttributesToString(FileAttributes attributes)
+        public static string AttributesToString(FileAttributes val)
         {
             if (_attributesMap == null) InitializeAttributes();
             StringBuilder sb = new();
             foreach (var kvp in _attributesMap)
             {
-                if (attributes.HasFlag(kvp.Value))
+                if (val.HasFlag(kvp.Value))
                 {
                     if (sb.Length > 0)
                     {
@@ -66,19 +66,19 @@ namespace ItemStorageManager.ItemStorage
                     sb.Append(kvp.Key[0]);
                 }
             }
-            return sb.ToString();
+            return sb.Length > 0 ? sb.ToString() : "Unknown";
         }
 
         public static string GetAttributesString(string text)
         {
             if (_attributesMap == null) InitializeAttributes();
             StringBuilder sb = new();
-            foreach (var attrText in text.Split(',').Select(x => x.Trim()))
+            foreach (var part in text.Split(',').Select(x => x.Trim()))
             {
                 bool isFound = false;
                 foreach (var kvp in _attributesMap)
                 {
-                    if (kvp.Key.Any(x => string.Equals(x, attrText, StringComparison.OrdinalIgnoreCase)))
+                    if (kvp.Key.Any(x => string.Equals(x, part, StringComparison.OrdinalIgnoreCase)))
                     {
                         if (sb.Length > 0)
                         {
@@ -90,37 +90,50 @@ namespace ItemStorageManager.ItemStorage
                 }
                 if (!isFound) throw new ArgumentException($"Invalid attributes string: {text}");
             }
-            return sb.ToString();
+            return sb.Length > 0 ? sb.ToString() : "Unknown";
         }
 
         public static FileAttributes MergeAttributes(string text, FileAttributes baseAttributes)
         {
             if (_attributesMap == null) InitializeAttributes();
-            var attr = baseAttributes;
-            foreach (var attrText in text.Split(',').Select(x => x.Trim()))
+            var flags = baseAttributes;
+            foreach (var part in text.Split(',').Select(x => x.Trim()))
             {
                 bool isFound = false;
-                if (attrText.StartsWith("-"))
+                if (part.StartsWith("-"))
                 {
-                    var trimmedAttrText = attrText.Substring(1).Trim();
+                    var trimmedPart = part.Substring(1).Trim();
                     foreach (var kvp in _attributesMap)
                     {
-                        if (kvp.Key.Any(x => string.Equals(x, trimmedAttrText, StringComparison.OrdinalIgnoreCase)))
+                        if (kvp.Key.Any(x => string.Equals(x, trimmedPart, StringComparison.OrdinalIgnoreCase)))
                         {
-                            attr &= ~kvp.Value;
+                            flags &= ~kvp.Value;
                             isFound = true;
                             break;
                         }
                     }
                 }
-                else if (attrText.StartsWith("+"))
+                else if (part.StartsWith("+"))
                 {
-                    var trimmedAttrText = attrText.Substring(1).Trim();
+                    var trimmedPart = part.Substring(1).Trim();
                     foreach (var kvp in _attributesMap)
                     {
-                        if (kvp.Key.Any(x => string.Equals(x, trimmedAttrText, StringComparison.OrdinalIgnoreCase)))
+                        if (kvp.Key.Any(x => string.Equals(x, trimmedPart, StringComparison.OrdinalIgnoreCase)))
                         {
-                            attr |= kvp.Value;
+                            flags |= kvp.Value;
+                            isFound = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    flags = default(FileAttributes);
+                    foreach (var kvp in _attributesMap)
+                    {
+                        if (kvp.Key.Any(x => string.Equals(x, part, StringComparison.OrdinalIgnoreCase)))
+                        {
+                            flags |= kvp.Value;
                             isFound = true;
                             break;
                         }
@@ -128,7 +141,7 @@ namespace ItemStorageManager.ItemStorage
                 }
                 if (!isFound) throw new ArgumentException($"Invalid attributes string: {text}");
             }
-            return attr;
+            return flags;
         }
     }
 }
