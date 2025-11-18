@@ -140,10 +140,7 @@ namespace ItemStorageManager.Functions
                     }
                     continue;
                 }
-                if (part.StartsWith("+"))
-                {
-                    tempPart = part.TrimStart('+');
-                }
+                tempPart = part.StartsWith("+") ? part.TrimStart('+') : part;
                 foreach (var kvp in map)
                 {
                     if (kvp.Key.Any(x => string.Equals(x, tempPart, StringComparison.OrdinalIgnoreCase)))
