@@ -60,7 +60,7 @@ namespace ItemStorageManager.ItemStorage
             }
         }
 
-        public AccessRuleSummary(string account, string rights, string accessType, string inheritance, string propagation) : this(account)
+        public AccessRuleSummary(string account, string rights, string accessType, string inheritance, string propagation)
         {
             Account = account;
             Rights = rights;
