@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using ItemStorageManager.Functions;
+using Microsoft.Win32;
 using System.Text.RegularExpressions;
 
 namespace ItemStorageManager.ItemStorage
@@ -24,6 +25,7 @@ namespace ItemStorageManager.ItemStorage
         public static RegistryValueKind StringToRegistryValueKind(string text)
         {
             if (_mapRegistryValueKind == null) InitializeRegistryValueKind();
+            /*
             foreach (var kvp in _mapRegistryValueKind)
             {
                 if (kvp.Key.Any(x => x.Equals(text, StringComparison.OrdinalIgnoreCase)))
@@ -32,10 +34,13 @@ namespace ItemStorageManager.ItemStorage
                 }
             }
             throw new ArgumentException($"Invalid RegistryValueKind string: {text}");
+            */
+            return TextFunctions.StringToFlags<RegistryValueKind>(text, _mapRegistryValueKind);
         }
         public static string RegistryValueKindToString(RegistryValueKind valueKind)
         {
             if (_mapRegistryValueKind == null) InitializeRegistryValueKind();
+            /*
             foreach (var kvp in _mapRegistryValueKind)
             {
                 if (kvp.Value == valueKind)
@@ -44,6 +49,8 @@ namespace ItemStorageManager.ItemStorage
                 }
             }
             return "Unknown";
+            */
+            return TextFunctions.FlagsToString<RegistryValueKind>(valueKind, _mapRegistryValueKind);
         }
 
         #endregion

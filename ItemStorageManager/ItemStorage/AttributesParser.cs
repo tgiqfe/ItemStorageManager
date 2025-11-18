@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using ItemStorageManager.Functions;
+using System.Text;
 
 namespace ItemStorageManager.ItemStorage
 {
@@ -33,6 +34,7 @@ namespace ItemStorageManager.ItemStorage
         public static FileAttributes StringToAttributes(string text)
         {
             if (_attributesMap == null) InitializeAttributes();
+            /*
             var flags = default(FileAttributes);
             foreach (var part in text.Split(',').Select(x => x.Trim()))
             {
@@ -49,11 +51,14 @@ namespace ItemStorageManager.ItemStorage
                 if (!isFound) throw new ArgumentException($"Invalid attributes string: {text}");
             }
             return flags;
+            */
+            return TextFunctions.StringToFlags<FileAttributes>(text, _attributesMap);
         }
 
         public static string AttributesToString(FileAttributes val)
         {
             if (_attributesMap == null) InitializeAttributes();
+            /*
             StringBuilder sb = new();
             foreach (var kvp in _attributesMap)
             {
@@ -67,11 +72,14 @@ namespace ItemStorageManager.ItemStorage
                 }
             }
             return sb.Length > 0 ? sb.ToString() : "Unknown";
+            */
+            return TextFunctions.FlagsToString<FileAttributes>(val, _attributesMap);
         }
 
         public static string GetAttributesString(string text)
         {
             if (_attributesMap == null) InitializeAttributes();
+            /*
             StringBuilder sb = new();
             foreach (var part in text.Split(',').Select(x => x.Trim()))
             {
@@ -91,11 +99,14 @@ namespace ItemStorageManager.ItemStorage
                 if (!isFound) throw new ArgumentException($"Invalid attributes string: {text}");
             }
             return sb.Length > 0 ? sb.ToString() : "Unknown";
+            */
+            return TextFunctions.GetCorrect<FileAttributes>(text, _attributesMap);
         }
 
         public static FileAttributes MergeAttributes(string text, FileAttributes baseAttributes)
         {
             if (_attributesMap == null) InitializeAttributes();
+            /*
             var flags = baseAttributes;
             foreach (var part in text.Split(',').Select(x => x.Trim()))
             {
@@ -142,6 +153,8 @@ namespace ItemStorageManager.ItemStorage
                 if (!isFound) throw new ArgumentException($"Invalid attributes string: {text}");
             }
             return flags;
+            */
+            return TextFunctions.MergeFlags<FileAttributes>(text, baseAttributes, _attributesMap);
         }
     }
 }
