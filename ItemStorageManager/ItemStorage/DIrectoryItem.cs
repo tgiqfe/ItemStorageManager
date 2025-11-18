@@ -330,7 +330,7 @@ namespace ItemStorageManager.ItemStorage
                 return false;
             }
             Logger.WriteLine("Info", $"Changing owner of {_log_target}. '{this.Path}' to '{newOwner}'");
-            
+
             try
             {
                 Logger.WriteLine("Info", "Adjusting token privilegs (SeTakeOwnershipPrivilege, SeRestorePrivilege, SeBackupPrivilege)");
@@ -367,7 +367,7 @@ namespace ItemStorageManager.ItemStorage
                 return false;
             }
             Logger.WriteLine("Info", $"Changing inheritance of {_log_target}. '{this.Path}' to '{isInherited}', preserve existing rules: {preserve}.");
-            
+
             try
             {
                 var di = new DirectoryInfo(this.Path);
@@ -398,11 +398,11 @@ namespace ItemStorageManager.ItemStorage
                 return false;
             }
             Logger.WriteLine("Info", $"Setting attributes of directory '{this.Path}' to '{attributes}'.");
-            
+
             try
             {
                 var di = new DirectoryInfo(this.Path);
-                di.Attributes = AttributeMapping.ParseFileAttributes(attributes, di.Attributes);
+                di.Attributes = AttributesParser.MergeAttributes(attributes, di.Attributes);
                 this.Attributes = di.Attributes.ToString();
                 Logger.WriteLine("Info", $"Successfully set attributes of directory '{this.Path}' to '{attributes}'.");
                 return true;

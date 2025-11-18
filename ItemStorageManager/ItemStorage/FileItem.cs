@@ -398,7 +398,7 @@ namespace ItemStorageManager.ItemStorage
             try
             {
                 var fi = new FileInfo(this.Path);
-                fi.Attributes = AttributeMapping.ParseFileAttributes(attributes, fi.Attributes);
+                fi.Attributes = AttributesParser.MergeAttributes(attributes, fi.Attributes);
                 this.Attributes = fi.Attributes.ToString();
                 Logger.WriteLine("Info", $"Successfully set attributes of file.");
                 return true;
