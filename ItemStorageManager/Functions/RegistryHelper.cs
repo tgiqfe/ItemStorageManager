@@ -17,13 +17,6 @@ namespace ItemStorageManager.Functions
 
         #endregion
 
-        /// <summary>
-        /// writableとcreateを逆に。最終的にはこちらを採用する予定。
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="writable"></param>
-        /// <param name="isCreate"></param>
-        /// <returns></returns>
         public static RegistryKey GetRegistryKey(string path, bool writable = false, bool isCreate = false)
         {
             string rootPath = path.Substring(0, path.IndexOf("\\"));
