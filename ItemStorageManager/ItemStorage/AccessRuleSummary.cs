@@ -1,4 +1,5 @@
-﻿using System.Security.AccessControl;
+﻿using ItemStorageManager.Functions.EnumParser;
+using System.Security.AccessControl;
 using System.Security.Principal;
 using System.Text.Json.Serialization;
 
@@ -80,28 +81,28 @@ namespace ItemStorageManager.ItemStorage
         {
             return new FileSystemAccessRule(
                 new NTAccount(Account),
-                AccessRuleParser.StringToFileSystemRights(this.Rights),
-                AccessRuleParser.StringToAccessControlType(this.AccessType));
+                FileSystemRightsParser.ParamsToRaw(this.Rights),
+                AccessControlTypeParser.ParamsToRaw(this.AccessType));
         }
 
         public FileSystemAccessRule ToAccessRuleForDirectory()
         {
             return new FileSystemAccessRule(
                 new NTAccount(Account),
-                AccessRuleParser.StringToFileSystemRights(this.Rights),
-                AccessRuleParser.StringToInheritanceFlags(this.Inheritance),
-                AccessRuleParser.StringToPropagationFlags(this.Propagation),
-                AccessRuleParser.StringToAccessControlType(this.AccessType));
+                FileSystemRightsParser.ParamsToRaw(this.Rights),
+                InheritanceFlagsParser.ParamsToRaw(this.Inheritance),
+                PropagationFlagsParser.ParamsToRaw(this.Propagation),
+                AccessControlTypeParser.ParamsToRaw(this.AccessType));
         }
 
         public RegistryAccessRule ToAccessRuleForRegistryKey()
         {
             return new RegistryAccessRule(
                 new NTAccount(Account),
-                AccessRuleParser.StringToRegistryRights(this.Rights),
-                AccessRuleParser.StringToInheritanceFlags(this.Inheritance),
-                AccessRuleParser.StringToPropagationFlags(this.Propagation),
-                AccessRuleParser.StringToAccessControlType(this.AccessType));
+                RegistryRightsParser.ParamsToRaw(this.Rights),
+                InheritanceFlagsParser.ParamsToRaw(this.Inheritance),
+                PropagationFlagsParser.ParamsToRaw(this.Propagation),
+                AccessControlTypeParser.ParamsToRaw(this.AccessType));
         }
     }
 }

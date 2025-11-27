@@ -9,6 +9,7 @@ namespace ItemStorageManager.ItemStorage
 {
     public class AccessRuleParser
     {
+        /*
         #region FileSystemRights mapping
 
         /// <summary>
@@ -61,6 +62,8 @@ namespace ItemStorageManager.ItemStorage
         }
 
         #endregion
+        */
+        /*
         #region RegistryRights mapping
 
         /// <summary>
@@ -104,6 +107,8 @@ namespace ItemStorageManager.ItemStorage
         }
 
         #endregion
+        */
+        /*
         #region InheritanceFlags mapping
 
         /// <summary>
@@ -136,6 +141,8 @@ namespace ItemStorageManager.ItemStorage
         }
 
         #endregion
+        */
+        /*
         #region PropagationFlags mapping
 
         /// <summary>
@@ -168,6 +175,8 @@ namespace ItemStorageManager.ItemStorage
         }
 
         #endregion
+        */
+        /*
         #region AccessControlType mapping
 
         /// <summary>
@@ -199,5 +208,6 @@ namespace ItemStorageManager.ItemStorage
         }
 
         #endregion
+        */
     }
 }
