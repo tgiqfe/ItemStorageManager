@@ -2,6 +2,7 @@
 
 namespace ItemStorageManager.ItemStorage
 {
+    /*
     public class Logger
     {
         /// <summary>
@@ -77,4 +78,5 @@ namespace ItemStorageManager.ItemStorage
             }
         }
     }
+    */
 }
