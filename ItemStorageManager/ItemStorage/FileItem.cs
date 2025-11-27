@@ -1,4 +1,5 @@
 ﻿using ItemStorageManager.Functions;
+using ItemStorageManager.Functions.EnumParser;
 using System.Security.AccessControl;
 using System.Security.Principal;
 
@@ -398,7 +399,7 @@ namespace ItemStorageManager.ItemStorage
             try
             {
                 var fi = new FileInfo(this.Path);
-                fi.Attributes = AttributesParser.MergeAttributes(attributes, fi.Attributes);
+                fi.Attributes = FileAttributesParser.MergeAttributes(attributes, fi.Attributes);
                 this.Attributes = fi.Attributes.ToString();
                 Logger.WriteLine("Info", $"Successfully set attributes of file.");
                 return true;

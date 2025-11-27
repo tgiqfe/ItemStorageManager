@@ -1,4 +1,5 @@
 ﻿using ItemStorageManager.Functions;
+using ItemStorageManager.Functions.EnumParser;
 using Microsoft.VisualBasic.FileIO;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -402,7 +403,7 @@ namespace ItemStorageManager.ItemStorage
             try
             {
                 var di = new DirectoryInfo(this.Path);
-                di.Attributes = AttributesParser.MergeAttributes(attributes, di.Attributes);
+                di.Attributes = FileAttributesParser.MergeAttributes(attributes, di.Attributes);
                 this.Attributes = di.Attributes.ToString();
                 Logger.WriteLine("Info", $"Successfully set attributes of directory '{this.Path}' to '{attributes}'.");
                 return true;

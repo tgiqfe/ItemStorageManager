@@ -1,16 +1,19 @@
-﻿using ItemStorageManager.Functions;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
-namespace ItemStorageManager.ItemStorage
+namespace ItemStorageManager.Functions.EnumParser
 {
-    /*
-    internal class AttributesParser
+    internal class FileAttributesParser : ParserBase<FileAttributes>
     {
-        private static Dictionary<string[], FileAttributes> _attributesMap = null;
-
-        private static void InitializeAttributes()
+        public FileAttributesParser()
         {
-            _attributesMap ??= new()
+            Initialize();
+        }
+
+        protected override void Initialize()
+        {
+            map = new()
             {
                 { new string[]{ "Archive" }, FileAttributes.Archive },
                 { new string[]{ "Compressed" }, FileAttributes.Compressed },
@@ -32,29 +35,35 @@ namespace ItemStorageManager.ItemStorage
             };
         }
 
-        public static FileAttributes StringToAttributes(string text)
+        #region Static methods.
+
+        private static FileAttributesParser _parser = null;
+
+        public static FileAttributes ParamsToRaw(string text)
         {
-            if (_attributesMap == null) InitializeAttributes();
-            return TextFunctions.StringToFlags<FileAttributes>(text, _attributesMap);
+            _parser ??= new FileAttributesParser();
+            return _parser.TextToFlags(text);
         }
 
-        public static string AttributesToString(FileAttributes val)
+        public static string RawToParams(FileAttributes flags)
         {
-            if (_attributesMap == null) InitializeAttributes();
-            return TextFunctions.FlagsToString<FileAttributes>(val, _attributesMap);
+            _parser ??= new FileAttributesParser();
+            return _parser.FlagsToText(flags);
         }
 
-        public static string GetAttributesString(string text)
+        public static string GetCorrectParameter(string text)
         {
-            if (_attributesMap == null) InitializeAttributes();
-            return TextFunctions.GetCorrect<FileAttributes>(text, _attributesMap);
+            _parser ??= new FileAttributesParser();
+            return _parser.GetCorrect(text);
         }
 
         public static FileAttributes MergeAttributes(string text, FileAttributes baseAttributes)
         {
-            if (_attributesMap == null) InitializeAttributes();
-            return TextFunctions.MergeFlags<FileAttributes>(text, baseAttributes, _attributesMap);
+            _parser ??= new FileAttributesParser();
+            return _parser.MergeFlags(text, baseAttributes);
         }
+
+
+        #endregion
     }
-    */
 }
