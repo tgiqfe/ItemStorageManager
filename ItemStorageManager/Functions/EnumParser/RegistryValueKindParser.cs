@@ -1,17 +1,18 @@
-﻿using ItemStorageManager.Functions;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Text.RegularExpressions;
 
-namespace ItemStorageManager.ItemStorage
+namespace ItemStorageManager.Functions.EnumParser
 {
-    public class RegistryParser
+    internal class RegistryValueKindParser : ParserBase<RegistryValueKind>
     {
-        #region RegistryValueKind mapping.
-
-        private static Dictionary<string[], RegistryValueKind> _mapRegistryValueKind = null;
-        private static void InitializeRegistryValueKind()
+        public RegistryValueKindParser()
         {
-            _mapRegistryValueKind = new Dictionary<string[], RegistryValueKind>
+            Initialize();
+        }
+
+        protected override void Initialize()
+        {
+            map = new()
             {
                 { new string[] { "REG_SZ", "String" }, RegistryValueKind.String },
                 { new string[] { "REG_BINARY", "Binary", "Bytes" }, RegistryValueKind.Binary },
@@ -22,20 +23,27 @@ namespace ItemStorageManager.ItemStorage
                 { new string[] { "REG_NONE", "None" }, RegistryValueKind.None },
             };
         }
-        public static RegistryValueKind StringToRegistryValueKind(string text)
+
+        #region Static methods.
+
+        private static RegistryValueKindParser _parser = null;
+
+        public static RegistryValueKind ParamsToRaw(string text)
         {
-            if (_mapRegistryValueKind == null) InitializeRegistryValueKind();
-            return TextFunctions.StringToFlags<RegistryValueKind>(text, _mapRegistryValueKind);
+            _parser ??= new RegistryValueKindParser();
+            return _parser.TextToFlags(text);
         }
-        public static string RegistryValueKindToString(RegistryValueKind valueKind)
+
+        public static string RawToParams(RegistryValueKind flags)
         {
-            if (_mapRegistryValueKind == null) InitializeRegistryValueKind();
-            return TextFunctions.FlagsToString<RegistryValueKind>(valueKind, _mapRegistryValueKind);
+            _parser ??= new RegistryValueKindParser();
+            return _parser.FlagsToText(flags);
         }
-        public static string GetRegistryValueKindString(string text)
+
+        public static string GetCorrectParameter(string text)
         {
-            if (_mapRegistryValueKind == null) InitializeRegistryValueKind();
-            return TextFunctions.GetCorrect<RegistryValueKind>(text, _mapRegistryValueKind);
+            _parser ??= new RegistryValueKindParser();
+            return _parser.GetCorrect(text);
         }
 
         #endregion

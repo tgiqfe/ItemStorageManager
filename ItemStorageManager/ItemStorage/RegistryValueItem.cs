@@ -1,4 +1,5 @@
 ﻿using ItemStorageManager.Functions;
+using ItemStorageManager.Functions.EnumParser;
 using Microsoft.Win32;
 
 namespace ItemStorageManager.ItemStorage
@@ -28,11 +29,11 @@ namespace ItemStorageManager.ItemStorage
                 if (regKey != null)
                 {
                     var valueKind = regKey.GetValueKind(valueName);
-                    this.ValueKind = RegistryParser.RegistryValueKindToString(valueKind);
+                    this.ValueKind = RegistryValueKindParser.RawToParams(valueKind);
                     this._dataObject = valueKind == RegistryValueKind.ExpandString ?
                         regKey.GetValue(valueName, null, RegistryValueOptions.DoNotExpandEnvironmentNames) :
                         regKey.GetValue(valueName);
-                    this.Data = RegistryParser.RegistryValueToString(_dataObject, valueKind);
+                    this.Data = RegistryValueKindParser.RegistryValueToString(_dataObject, valueKind);
                 }
             }
         }
@@ -43,7 +44,7 @@ namespace ItemStorageManager.ItemStorage
             {
                 try
                 {
-                    regKey.SetValue(name, data, RegistryParser.StringToRegistryValueKind(valueKindString));
+                    regKey.SetValue(name, data, RegistryValueKindParser.ParamsToRaw(valueKindString));
                     return true;
                 }
                 catch { }
@@ -71,7 +72,7 @@ namespace ItemStorageManager.ItemStorage
             {
                 try
                 {
-                    object data = RegistryParser.StringToRegistryValue(dataString, valueKind);
+                    object data = RegistryValueKindParser.StringToRegistryValue(dataString, valueKind);
                     regKey.SetValue(name, data, valueKind);
                     return true;
                 }
@@ -86,8 +87,8 @@ namespace ItemStorageManager.ItemStorage
             {
                 try
                 {
-                    RegistryValueKind valueKind = RegistryParser.StringToRegistryValueKind(valueKindString);
-                    object data = RegistryParser.StringToRegistryValue(dataString, valueKind);
+                    RegistryValueKind valueKind = RegistryValueKindParser.ParamsToRaw(valueKindString);
+                    object data = RegistryValueKindParser.StringToRegistryValue(dataString, valueKind);
                     regKey.SetValue(name, data, valueKind);
                     return true;
                 }
@@ -138,7 +139,7 @@ namespace ItemStorageManager.ItemStorage
                 {
                     if (overwrite || !dstKey.GetValueNames().Contains(this.Name))
                     {
-                        var valueKind = RegistryParser.StringToRegistryValueKind(this.ValueKind);
+                        var valueKind = RegistryValueKindParser.ParamsToRaw(this.ValueKind);
                         dstKey.SetValue(this.Name, this._dataObject, valueKind);
                         Logger.WriteLine("Info", $"Successfully copied {_log_target}.");
                         return true;
@@ -170,7 +171,7 @@ namespace ItemStorageManager.ItemStorage
                 {
                     if (overwrite || !dstKey.GetValueNames().Contains(dstName))
                     {
-                        var valueKind = RegistryParser.StringToRegistryValueKind(this.ValueKind);
+                        var valueKind = RegistryValueKindParser.ParamsToRaw(this.ValueKind);
                         dstKey.SetValue(dstName, this._dataObject, valueKind);
                         Logger.WriteLine("Info", $"Successfully copied {_log_target}.");
                         return true;
